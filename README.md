@@ -5,16 +5,16 @@ A place to place all white-label and brand-customizable interactive games
 
 Install dependencies
 ```sh
-$ yarn install
+$ npm install
 ```
 
 Run dev server with hotreload
 ```
-$ yarn start
+$ npm start
 ```
 
 Build dist
 ```sh
 # TODO
-$ yarn build
+$ npm build
 ```
