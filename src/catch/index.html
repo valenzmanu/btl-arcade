@@ -6,6 +6,8 @@
            background:#fff;
            margin:0px;
            padding:0px;
+           width: 720px;
+           height: 1280px;
         }
         #gjs-canvas {
             margin: 0px;
@@ -16,19 +18,27 @@
             display:none;
         }
     </style>
-    <meta property="og:image" content="./images/background.jpg"/>
-    <meta property="og:image" content="./images/santa_bag.png"/>
-    <meta property="og:image" content="./images/bottle1.png"/>
-    <meta property="og:image" content="./images/bottle2.png"/>
+    <meta property="og:image" content="./assets/bg.png"/>
+    <meta property="og:image" content="./assets/catcher.png"/>
+    <meta property="og:image" content="./assets/lives.png"/>
+    <meta property="og:image" content="./assets/fi1.png"/>
+    <meta property="og:video" content="./assets/idle.mp4"/>
+    <script src="./resources.js"></script>
+    <script src="./config.js"></script>
     <script type="module" src="./catch.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div>
-        <video class="input_video" style="display: none"></video>
+    <video class="input_video" id="input_video" style="display: none;"></video>
+    <video id="idle-video" autoplay muted loop playsinline>
+        <source type="video/mp4" src="./assets/idle.mp4"/>
+    </video>
+    <video id="win-video" autoplay muted loop playsinline style="display: none;">
+        <source type="video/mp4" src="./assets/win.mp4"/>
+    </video>
+    <video id="lose-video" autoplay muted loop playsinline style="display: none;">
+        <source type="video/mp4" src="./assets/lose.mp4"/>
+    </video>
+    <div id="game-container" style="display: none">
         <canvas id="gjs-canvas"></canvas>
     </div>
 </body>

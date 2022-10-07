@@ -11,6 +11,8 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@mediapipe/camera_utils": "^0.3.1640029074",
+    "@mediapipe/hands": "^0.4.1646424915",
     "gamejs": "^2.0.2"
   },
   "devDependencies": {
