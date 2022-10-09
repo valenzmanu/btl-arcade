@@ -1,0 +1,25 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="trivia.css">
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <progress id="progress-bar" value="15" max="15" style="display: none;"></progress>
+    <video id="idle-video" autoplay muted loop playsinline>
+        <source type="video/mp4" src="../common/assets/idle.mp4"/>
+    </video>
+    <video id="win-video" autoplay muted loop playsinline style="display: none;">
+        <source type="video/mp4" src="../common/assets/win.mp4"/>
+    </video>
+    <video id="lose-video" autoplay muted loop playsinline style="display: none;">
+        <source type="video/mp4" src="../common/assets/lose.mp4"/>
+    </video>
+    <div id="start-text">Presiona "Start" para empezar o "Reset" para regresar</div>
+    <div id="question-text" style="display: none;"> Pregunta </div>
+</body>
+<script src="questions.js"></script>
+<script src="trivia.js"></script>
+
+</html>
