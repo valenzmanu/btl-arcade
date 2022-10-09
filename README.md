@@ -16,5 +16,5 @@ $ npm start
 Build dist
 ```sh
 # TODO
-$ npm build
+$ npm run build
 ```
