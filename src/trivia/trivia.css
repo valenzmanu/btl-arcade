@@ -55,10 +55,11 @@ progress[value] {
     background-size: 35px 20px, 100% 100%, 100% 100%;
     color: red;
     background-color: black;
-  }
-  progress[value]::-webkit-progress-value {
+}
+
+progress[value]::-webkit-progress-value {
     background-color: red;
-  }
+}
 
 #progress-bar {
     align-items: center;
