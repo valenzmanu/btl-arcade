@@ -1,14 +1,24 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <title>Arcade index</title>
-  </head>
-  <body>
-    <h1>Available Games:</h1>
-    <ul>
-        <li><a href="./catch/index.html">Catch</a></li>
-        <li><a href="./trivia/index.html">Trivia</a></li>
-    </ul>
-  </body>
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="index.css">
+  <title>Arcade index</title>
+</head>
+
+<body>
+  <video id="idle-video" autoplay muted loop playsinline>
+    <source type="video/mp4" src="./common/assets/idle.mp4" />
+  </video>
+  <div id="list-container">
+    <h1 id="start-title">Elige un juego:</h1>
+    <ol type="A" id="games-list">
+      <li><a href="./catch/index.html" style="color: white;">Atrapa Objetos</a></li>
+      <li><a href="./trivia/index.html" style="color: white;">Trivia</a></li>
+    </ol>
+  </div>
+</body>
+<script src="index.js"></script>
+
 </html>
