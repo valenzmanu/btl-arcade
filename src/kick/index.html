@@ -3,23 +3,31 @@
 <head>
     <link rel="stylesheet" href="kick.css">
     <meta charset="UTF-8">
+    <meta property="og:image" content="./assets/bar.png" />
+    <meta property="og:image" content="./assets/bar-ball.png" />
+    <script src="config.js"></script>
+    <script src="resources.js"></script>
+    <script src="kick.js" type="module"></script>
 </head>
 
 <body>
+    <div id="bar-container" style="visibility: hidden;"">
+        <canvas id="gjs-canvas"></canvas>
+    </div>
     <video id="idle-video" autoplay muted loop playsinline>
-        <source type="video/mp4" src="../common/assets/idle.mp4"/>
+        <source type="video/mp4" src="../common/assets/idle.mp4" />
     </video>
     <video id="start-video" autoplay muted loop playsinline style="display: none;">
-        <source type="video/mp4" src="./assets/start.mp4"/>
+        <source type="video/mp4" src="./assets/start.mp4" />
     </video>
     <video id="goal-video" autoplay muted playsinline style="display: none;">
-        <source type="video/mp4" src="./assets/goal.mp4"/>
+        <source type="video/mp4" src="./assets/goal.mp4" />
     </video>
     <video id="fail-video" autoplay muted playsinline style="display: none;">
-        <source type="video/mp4" src="./assets/fail.mp4"/>
+        <source type="video/mp4" src="./assets/fail.mp4" />
     </video>
     <div id="start-text">Presiona "Start" para empezar o "Reset" para regresar</div>
+
 </body>
-<script src="kick.js" type="module"></script>
 
 </html>
