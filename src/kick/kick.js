@@ -135,7 +135,7 @@ function start_accuracy_bar() {
 }
 
 function get_new_accuracy_y_pos(curPos) {
-    if(accuracyMovingObjectStopped){
+    if (accuracyMovingObjectStopped) {
         return curPos
     }
     if (curPos > accuracyMovingObjectPosYLowerLimit) {
@@ -147,7 +147,7 @@ function get_new_accuracy_y_pos(curPos) {
     return (curPos + accuracyMovingObjectDir)
 }
 
-function won_by_position(curPos){
+function won_by_position(curPos) {
     var won = (curPos >= (accuracyMovingObjectPosYLowerLimit - 80) && curPos <= (accuracyMovingObjectPosYLowerLimit + 50))
     console.log(`Won by position: ${won}`)
     return won
