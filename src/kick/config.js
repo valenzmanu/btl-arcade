@@ -4,5 +4,11 @@ const config = {
         accuracyBarSize: [150, 500],
         movingObjectVelocity: 7,
     },
-    cameraSize: [720, 500]
+    camera: {
+        size: [1280, 720],
+        sx: 300,
+        sy: 0,
+        sw: 680,
+        sh: 720,
+    }
 }

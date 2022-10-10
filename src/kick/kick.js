@@ -1,10 +1,113 @@
 const gamejs = require('gamejs')
+const cameraUtils = require('@mediapipe/camera_utils');
+const _pose = require('@mediapipe/pose');
+const drawingUtils = require('@mediapipe/drawing_utils')
+const controlUtils = require('@mediapipe/control_utils')
 
 const screens = {
     start: "START",
     waiting_kick: "WAITING_KIK",
     goal: "GOAL",
     fail: "FAIL"
+}
+let cameraVisible = false;
+const canvasElement = document.getElementsByClassName('output_canvas')[0];
+const canvasCtx = canvasElement.getContext('2d');
+const inputCanvasElement = document.getElementsByClassName('input_canvas')[0];
+const inputCanvasCtx = inputCanvasElement.getContext('2d');
+
+// Mediapipe Stuff
+const pose = new _pose.Pose({
+    locateFile: (file) => {
+        return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
+    }
+});
+pose.setOptions({
+    modelComplexity: 1,
+    smoothLandmarks: true,
+    enableSegmentation: true,
+    smoothSegmentation: true,
+    minDetectionConfidence: 0.5,
+    minTrackingConfidence: 0.5
+});
+pose.onResults(onResults);
+
+function onResults(results) {
+    if (!results.poseLandmarks) {
+        grid.updateLandmarks([]);
+        return;
+    }
+
+    canvasCtx.save();
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    canvasCtx.drawImage(results.segmentationMask, 0, 0,
+        canvasElement.width, canvasElement.height);
+
+    // Only overwrite existing pixels.
+    canvasCtx.globalCompositeOperation = 'source-in';
+    canvasCtx.fillStyle = '#00FF00';
+    canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+
+    // Only overwrite missing pixels.
+    canvasCtx.globalCompositeOperation = 'destination-atop';
+    canvasCtx.drawImage(
+        results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+    canvasCtx.globalCompositeOperation = 'source-over';
+    drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS,
+        { color: '#00FF00', lineWidth: 4 });
+    drawLandmarks(canvasCtx, results.poseLandmarks,
+        { color: '#FF0000', lineWidth: 2 });
+    canvasCtx.restore();
+}
+
+const videoElement = document.getElementsByClassName('input_video')[0];
+const camera = new cameraUtils.Camera(videoElement, {
+    onFrame: async () => {
+        inputCanvasCtx.drawImage(
+            videoElement,
+            config.camera.sx,
+            config.camera.sy,
+            config.camera.sw,
+            config.camera.sh,
+            0,
+            0,
+            inputCanvasElement.width,
+            inputCanvasElement.height,
+        );
+        await pose.send({ image: inputCanvasElement });
+    },
+    width: config.camera.size[0],
+    height: config.camera.size[1]
+});
+camera.start();
+
+function onResults(results) {
+    console.log(results)
+    if (!results.poseLandmarks) {
+        console.log("No results")
+        return;
+    }
+
+    canvasCtx.save();
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+    // Only overwrite existing pixels.
+    canvasCtx.globalCompositeOperation = 'source-in';
+    canvasCtx.fillStyle = '#00FF00';
+    canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+
+    // Only overwrite missing pixels.
+    canvasCtx.globalCompositeOperation = 'destination-atop';
+    canvasCtx.drawImage(
+        results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+    canvasCtx.globalCompositeOperation = 'source-over';
+    drawingUtils.drawConnectors(canvasCtx, results.poseLandmarks, _pose.POSE_CONNECTIONS,
+        { color: '#00FF00', lineWidth: 4 });
+    drawingUtils.drawLandmarks(canvasCtx, results.poseLandmarks,
+        { color: '#FF0000', lineWidth: 2 });
+    canvasCtx.restore();
 }
 
 // Game Stuff
@@ -46,7 +149,9 @@ document.addEventListener('keyup', (e) => {
             else {
                 start_game()
             }
-
+            break;
+        case 'KeyC':
+            toggleCamera()
             break;
     }
 });
@@ -55,7 +160,6 @@ function onTick(msDuration) {
     display.clear()
     display.blit(accuracyBarImg, [0, 0])
     accuracyMovingObjectPos[1] = get_new_accuracy_y_pos(accuracyMovingObjectPos[1])
-    console.log(`accuracyMovingObjectPos: ${accuracyMovingObjectPos}`)
     display.blit(accuracyMovingObjectImg, accuracyMovingObjectPos)
 }
 
@@ -156,6 +260,16 @@ function won_by_position(curPos) {
 function setup_display() {
     display = gamejs.display.getSurface()
     size = display.getSize()
+}
+
+function toggleCamera() {
+    if (!cameraVisible) {
+        show('camera_container')
+        cameraVisible = true;
+    } else {
+        hide('camera_container')
+        cameraVisible = false
+    }
 }
 
 gamejs.ready(function () {
