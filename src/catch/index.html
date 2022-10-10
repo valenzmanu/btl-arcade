@@ -6,8 +6,6 @@
            background:#fff;
            margin:0px;
            padding:0px;
-           width: 720px;
-           height: 1280px;
         }
         #gjs-canvas {
             margin: 0px;
@@ -17,6 +15,23 @@
             /** automatically made visible once game is loaded **/
             display:none;
         }
+
+        video {
+            margin: 0px;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+        }
+
+        #output_canvas {
+            width: 100%;
+            height: 25%;
+        }
+        #input_canvas {
+            width: 100%;
+            height: 25%;
+        }
+
     </style>
     <meta property="og:image" content="./assets/bg.png"/>
     <meta property="og:image" content="./assets/catcher.png"/>
@@ -28,7 +43,12 @@
     <script type="module" src="./catch.js"></script>
 </head>
 <body>
-    <video class="input_video" id="input_video" style="display: none;"></video>
+    <canvas class="input_canvas" id="input_canvas" style="display: none;"></canvas>
+    <div id="camera_container" style="display: none;">
+        <video class="input_video" id="input_video" style="display: none;"></video>
+        <canvas class="output_canvas" id="output_canvas"></canvas>
+    </div>
+    
     <video id="idle-video" autoplay muted loop playsinline>
         <source type="video/mp4" src="./assets/idle.mp4"/>
     </video>

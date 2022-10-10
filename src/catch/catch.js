@@ -3,11 +3,21 @@ const pixelcollision = require('gamejs/src/gamejs/pixelcollision')
 const vectors = require('gamejs/src/gamejs/math/vectors')
 const mpHands = require('@mediapipe/hands')
 const cameraUtils = require('@mediapipe/camera_utils')
+const drawingUtils = require('@mediapipe/drawing_utils')
+
+import hand_landmark_full from "url:./lib/hand_landmark_full.tflite"
+import hands_solution_packed_assets_loader from "url:./lib/hands_solution_packed_assets_loader.sj"
+import hands_solution_simd_wasm_bin from "url:./lib/hands_solution_simd_wasm_bin.sj"
+import hands_solution_packed_assetsData from "url:./lib/hands_solution_packed_assets.data"
+import hands_solution_simd_wasm_binWasm from "url:./lib/hands_solution_simd_wasm_bin.wasm"
+import handsBinarypb from "url:./lib/hands.binarypb"
+
 
 class Catch {
 
     #deathCallback = function() {}
     #winCallback = function() {}
+    #font = new gamejs.font.Font('200px monospace');
 
     constructor(config, resources) {
         this.config = config
@@ -77,6 +87,8 @@ class Catch {
         
         this.display.blit(this.state.background, [0, 0])
         
+        this.display.blit(this.#font.render(`${this.state.score}`, '#ffffff'), [this.size[0] - 200, 0]);
+
         if(this.state.started) {
             if(this.state.lives) {
                 this.state.lives.forEach(live => {
@@ -194,6 +206,28 @@ let running = false;
 let cameraVisible = false;
 const controls = setupControls()
 
+const canvasElement = document.getElementsByClassName('output_canvas')[0];
+const canvasCtx = canvasElement.getContext('2d');
+
+var canvas = document.getElementById('input_canvas');
+var ctx = canvas.getContext('2d');
+
+function drawHands(results) {
+    if(!cameraVisible) return
+    canvasCtx.save();
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+    if (results.multiHandLandmarks) {
+        for (const landmarks of results.multiHandLandmarks) {
+
+        drawingUtils.drawConnectors(canvasCtx, landmarks, mpHands.HAND_CONNECTIONS,
+                        {color: '#00FF00', lineWidth: 5});
+        drawingUtils.drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
+        }
+    }
+    canvasCtx.restore();
+}
+
 function startGame() {
     running = true;
     gamejs.preload([
@@ -217,6 +251,7 @@ function startGame() {
     
                     game.moveCatcher(avgXPos);
             }
+            drawHands(results);
         })
 
         gamejs.onTick(function(msDuration) {
@@ -267,17 +302,30 @@ function win() {
 
 function toggleCamera() {
     if(!cameraVisible) {
-        show('input_video')
+        show('camera_container')
         cameraVisible = true;  
     } else {
-        hide('input_video')
+        hide('camera_container')
         cameraVisible = false
     }
 }
 
 function setupControls() {
-    //TODO: Fix do not use jsdelivr
     const hands = new mpHands.Hands({locateFile: (file) => {
+        switch(file) {
+            case 'hand_landmark_full.tflite':
+                return hand_landmark_full
+            case 'hands_solution_packed_assets_loader.js':
+                return hands_solution_packed_assets_loader
+            case 'hands_solution_simd_wasm_bin.js':
+                return hands_solution_simd_wasm_bin
+            case 'hands.binarypb':
+                return handsBinarypb
+            case 'hands_solution_packed_assets.data':
+                return hands_solution_packed_assetsData
+            case 'hands_solution_simd_wasm_bin.wasm':
+                return hands_solution_simd_wasm_binWasm
+        }
         return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
     }});
     
@@ -288,13 +336,28 @@ function setupControls() {
         minTrackingConfidence: 0.5
     });
 
+    hands.onResults(function(results) {
+        drawHands(results)
+    })
+
     const videoElement = document.getElementsByClassName('input_video')[0];
     const camera = new cameraUtils.Camera(videoElement, {
         onFrame: async () => {
-            await hands.send({image: videoElement});
+            ctx.drawImage(
+                videoElement,
+                config.camera.sx,
+                config.camera.sy,
+                config.camera.sw,
+                config.camera.sh,
+                0,
+                0,
+                canvas.width,
+                canvas.height,
+            );
+            await hands.send({image: canvas});
         },
-        width: config.cameraSize[0],
-        height: config.cameraSize[1]
+        width: config.camera.size[0],
+        height: config.camera.size[1]
     });
 
     camera.start()
@@ -310,6 +373,10 @@ document.addEventListener('keyup', (e) => {
             break;
         case 'KeyC':
             toggleCamera()
+            break;
+        case 'KeyR':
+            if(!running)
+                window.location = '/'
             break;
     }
 });

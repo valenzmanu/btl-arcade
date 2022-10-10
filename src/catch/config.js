@@ -15,5 +15,11 @@ const config = {
     },
     loseCooldownMs: 10000,
     winCooldownMs: 10000,
-    cameraSize: [720, 500]
+    camera: {
+        size: [500, 500],
+        sx: 0,
+        sy: 0,
+        sw: 500,
+        sh: 500,
+    }
 }
