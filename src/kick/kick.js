@@ -15,6 +15,7 @@ const canvasElement = document.getElementsByClassName('output_canvas')[0];
 const canvasCtx = canvasElement.getContext('2d');
 const inputCanvasElement = document.getElementsByClassName('input_canvas')[0];
 const inputCanvasCtx = inputCanvasElement.getContext('2d');
+let yTrigger = canvasElement.height * config.game.triggerLineYPerc
 
 // Mediapipe Stuff
 const pose = new _pose.Pose({
@@ -31,35 +32,6 @@ pose.setOptions({
     minTrackingConfidence: 0.5
 });
 pose.onResults(onResults);
-
-function onResults(results) {
-    if (!results.poseLandmarks) {
-        grid.updateLandmarks([]);
-        return;
-    }
-
-    canvasCtx.save();
-    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    canvasCtx.drawImage(results.segmentationMask, 0, 0,
-        canvasElement.width, canvasElement.height);
-
-    // Only overwrite existing pixels.
-    canvasCtx.globalCompositeOperation = 'source-in';
-    canvasCtx.fillStyle = '#00FF00';
-    canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
-
-    // Only overwrite missing pixels.
-    canvasCtx.globalCompositeOperation = 'destination-atop';
-    canvasCtx.drawImage(
-        results.image, 0, 0, canvasElement.width, canvasElement.height);
-
-    canvasCtx.globalCompositeOperation = 'source-over';
-    drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS,
-        { color: '#00FF00', lineWidth: 4 });
-    drawLandmarks(canvasCtx, results.poseLandmarks,
-        { color: '#FF0000', lineWidth: 2 });
-    canvasCtx.restore();
-}
 
 const videoElement = document.getElementsByClassName('input_video')[0];
 const camera = new cameraUtils.Camera(videoElement, {
@@ -83,10 +55,16 @@ const camera = new cameraUtils.Camera(videoElement, {
 camera.start();
 
 function onResults(results) {
-    console.log(results)
+    //console.log(results)
     if (!results.poseLandmarks) {
         console.log("No results")
         return;
+    }
+
+    triggerKickFromResults(results)
+
+    if (!cameraVisible) {
+        return
     }
 
     canvasCtx.save();
@@ -107,12 +85,22 @@ function onResults(results) {
         { color: '#00FF00', lineWidth: 4 });
     drawingUtils.drawLandmarks(canvasCtx, results.poseLandmarks,
         { color: '#FF0000', lineWidth: 2 });
+
+    
+    // Draw Trigger Line
+    if (cameraVisible) {
+        canvasCtx.beginPath()
+        canvasCtx.moveTo(0, yTrigger)
+        canvasCtx.lineTo(canvasElement.width, yTrigger)
+        canvasCtx.lineWidth = 2
+        canvasCtx.stroke()
+    }
+
     canvasCtx.restore();
 }
 
 // Game Stuff
 var current_screen = screens.start
-var kicking = false
 
 // Game Js Stuff
 gamejs.preload([resources.accuracyBarImg, resources.accuracyMovingObjectImg])
@@ -279,4 +267,19 @@ gamejs.ready(function () {
         onTick(msDuration)
     })
 })
+
+function triggerKickFromResults(results) {
+    if(current_screen != screens.waiting_kick){
+        return
+    }
+    let leftFootY = results.poseLandmarks[31].y * canvasElement.height
+    let rigthFootY = results.poseLandmarks[32].y * canvasElement.height
+    console.log(`left foot: ${leftFootY}, right foot: ${rigthFootY}, yTrigger: ${yTrigger}`)
+    if(leftFootY > yTrigger && rigthFootY <= yTrigger){
+        kick()
+    }
+    if(rigthFootY > yTrigger && leftFootY <= yTrigger){
+        kick()
+    }
+}
 
