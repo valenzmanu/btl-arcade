@@ -4,6 +4,13 @@ const _pose = require('@mediapipe/pose');
 const drawingUtils = require('@mediapipe/drawing_utils')
 const controlUtils = require('@mediapipe/control_utils')
 
+import pose_landmark_full from "url:./lib/pose_landmark_full.tflite"
+import pose_solution_packed_assets_loader from "url:./lib/pose_solution_packed_assets_loader.sj"
+import pose_solution_simd_wasm_bin from "url:./lib/pose_solution_simd_wasm_bin.sj"
+import pose_solution_simd_wasm_bin_wasm from "url:./lib/pose_solution_simd_wasm_bin.wasm"
+import pose_web_binarypb from "url:./lib/pose_web.binarypb"
+import pose_solution_packed_assets_data from "url:./lib/pose_solution_packed_assets.data"
+
 const screens = {
     start: "START",
     waiting_kick: "WAITING_KIK",
@@ -20,6 +27,20 @@ let yTrigger = canvasElement.height * config.game.triggerLineYPerc
 // Mediapipe Stuff
 const pose = new _pose.Pose({
     locateFile: (file) => {
+        switch(file){
+            case 'pose_landmark_full.tflite':
+                return pose_landmark_full
+            case 'pose_solution_packed_assets_loader.js':
+                return pose_solution_packed_assets_loader
+            case 'pose_solution_simd_wasm_bin.js':
+                return pose_solution_simd_wasm_bin
+            case 'pose_solution_simd_wasm_bin.wasm':
+                return pose_solution_simd_wasm_bin_wasm
+            case 'pose_web.binarypb':
+                return pose_web_binarypb
+            case 'pose_solution_packed_assets.data':
+                return pose_solution_packed_assets_data
+        }
         return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
     }
 });
@@ -155,7 +176,7 @@ function start_game() {
     hideAll()
     accuracyMovingObjectStopped = false
     loadVideo("start-video")
-    setVideoPlaybackRate("start-video", 4.0)
+    setVideoPlaybackRate("start-video", 1.0)
     show("start-video")
     show("bar-container")
     current_screen = screens.waiting_kick
@@ -165,7 +186,7 @@ function score_goal() {
     hideAll()
     accuracyMovingObjectStopped = true
     loadVideo("goal-video")
-    setVideoPlaybackRate("goal-video", 2.0)
+    setVideoPlaybackRate("goal-video", 1.2)
     show("goal-video")
     accuracyMovingObjectStopped = true
     current_screen = screens.goal
@@ -220,7 +241,7 @@ function hideAll() {
 function start_accuracy_bar() {
     accuracyBarImg = gamejs.image.load(resources.accuracyBarImg).scale(config.game.accuracyBarSize)
     accuracyMovingObjectImg = gamejs.image.load(resources.accuracyMovingObjectImg).scale(config.game.movingObjectSize)
-    accuracyMovingObjectPos = [20, 0]
+    accuracyMovingObjectPos = [-45, 0]
     accuracyMovingObjectDir = 1 * config.game.movingObjectVelocity
     accuracyMovingObjectPosYUpperLimit = 0
     accuracyMovingObjectPosYLowerLimit = config.game.accuracyBarSize[1] - config.game.movingObjectSize[1]
