@@ -1,7 +1,7 @@
 const config = {
     game: {
-        movingObjectSize: [150, 150],
-        accuracyBarSize: [150, 500],
+        movingObjectSize: [250, 200],
+        accuracyBarSize: [150, 800],
         movingObjectVelocity: 7,
         triggerLineYPerc: 0.85,
     },
