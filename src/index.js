@@ -8,6 +8,9 @@ document.addEventListener('keyup', (e) => {
         case 'KeyB':
             document.location = "./trivia/index.html"
             break;
+        case 'KeyC':
+            document.location = "./kick/index.html"
+            break;
         case 'KeyS':
             toggleGameList()
             break;

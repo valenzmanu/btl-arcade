@@ -1,0 +1,38 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="kick.css">
+    <meta charset="UTF-8">
+    <meta property="og:image" content="./assets/bar.png" />
+    <meta property="og:image" content="./assets/bar-ball.png" />
+    <script src="config.js"></script>
+    <script src="resources.js"></script>
+    <script src="kick.js" type="module"></script>
+</head>
+
+<body>
+    <canvas class="input_canvas" id="input_canvas" style="display: none;"></canvas>
+    <div id="camera_container" style="display: none;">
+        <video class="input_video" id="input_video" style="display: none;"></video>
+        <canvas class="output_canvas" id="output_canvas"></canvas>
+    </div>
+    <div id="bar-container" style="visibility: hidden;"">
+        <canvas id="gjs-canvas"></canvas>
+    </div>
+    <video id="idle-video" autoplay muted loop playsinline>
+        <source type="video/mp4" src="../common/assets/idle.mp4" />
+    </video>
+    <video id="start-video" autoplay muted loop playsinline style="display: none;">
+        <source type="video/mp4" src="./assets/start.mp4" />
+    </video>
+    <video id="goal-video" autoplay muted playsinline style="display: none;">
+        <source type="video/mp4" src="./assets/goal.mp4" />
+    </video>
+    <video id="fail-video" autoplay muted playsinline style="display: none;">
+        <source type="video/mp4" src="./assets/fail.mp4" />
+    </video>
+    <div id="start-text">Presiona "Start" para empezar o "Reset" para regresar</div>
+
+</body>
+
+</html>
