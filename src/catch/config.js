@@ -4,11 +4,11 @@ const config = {
     fallingItemsSize: [150, 150],
     game: {
         lives: 3,
-        maxFallingItems: 3,
+        maxFallingItems: 6,
         fallSpeed: {
-            initial: 5,
-            step: 1,
-            max: 10,
+            initial: 15,
+            step: 4,
+            max: 30,
         },
         levelUpMs: 5000,
         winScore: 10,
@@ -16,10 +16,10 @@ const config = {
     loseCooldownMs: 10000,
     winCooldownMs: 10000,
     camera: {
-        size: [500, 500],
-        sx: 0,
+        size: [1280, 720],
+        sx: 400,
         sy: 0,
-        sw: 500,
-        sh: 500,
+        sw: 480,
+        sh: 360,
     }
 }

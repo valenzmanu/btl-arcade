@@ -1,15 +1,15 @@
 const config = {
     game: {
-        movingObjectSize: [250, 200],
-        accuracyBarSize: [150, 800],
-        movingObjectVelocity: 7,
+        movingObjectSize: [175, 175],
+        accuracyBarSize: [125, 500],
+        movingObjectVelocity: 20,
         triggerLineYPerc: 0.85,
     },
     camera: {
         size: [1280, 720],
-        sx: 300,
+        sx: 400,
         sy: 0,
-        sw: 680,
+        sw: 480,
         sh: 720,
     },
 }

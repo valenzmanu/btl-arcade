@@ -78,7 +78,7 @@ camera.start();
 function onResults(results) {
     //console.log(results)
     if (!results.poseLandmarks) {
-        console.log("No results")
+        //console.log("No results")
         return;
     }
 
@@ -241,7 +241,7 @@ function hideAll() {
 function start_accuracy_bar() {
     accuracyBarImg = gamejs.image.load(resources.accuracyBarImg).scale(config.game.accuracyBarSize)
     accuracyMovingObjectImg = gamejs.image.load(resources.accuracyMovingObjectImg).scale(config.game.movingObjectSize)
-    accuracyMovingObjectPos = [-45, 0]
+    accuracyMovingObjectPos = [-25, 0]
     accuracyMovingObjectDir = 1 * config.game.movingObjectVelocity
     accuracyMovingObjectPosYUpperLimit = 0
     accuracyMovingObjectPosYLowerLimit = config.game.accuracyBarSize[1] - config.game.movingObjectSize[1]
@@ -295,7 +295,7 @@ function triggerKickFromResults(results) {
     }
     let leftFootY = results.poseLandmarks[31].y * canvasElement.height
     let rigthFootY = results.poseLandmarks[32].y * canvasElement.height
-    console.log(`left foot: ${leftFootY}, right foot: ${rigthFootY}, yTrigger: ${yTrigger}`)
+    //console.log(`left foot: ${leftFootY}, right foot: ${rigthFootY}, yTrigger: ${yTrigger}`)
     if(leftFootY > yTrigger && rigthFootY <= yTrigger){
         kick()
     }
