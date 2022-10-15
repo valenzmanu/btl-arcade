@@ -87,7 +87,7 @@ class Catch {
         
         this.display.blit(this.state.background, [0, 0])
         
-        this.display.blit(this.#font.render(`${this.state.score}`, '#ffffff'), [this.size[0] - 200, 0]);
+        this.display.blit(this.#font.render(`${this.state.score}`, '#ffffff'), [this.size[0] - 200, 10]);
 
         if(this.state.started) {
             if(this.state.lives) {
