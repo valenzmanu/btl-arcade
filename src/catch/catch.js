@@ -36,6 +36,9 @@ class Catch {
             fallingItems: [],
             speed: this.config.game.fallSpeed.initial,
             score: 0,
+            level: 1,
+            itemsToSpawn: this.config.game.fallingItems.initial,
+            lastItemSpawnLevelUp: 1,
         }
     }
 
@@ -80,10 +83,23 @@ class Catch {
         this.#resetState()
         this.setup()
     }
+    
+    #lastEpoch = new Date().getTime()
 
     onTick(msDuration) {
+        let newEpoch = new Date().getTime()
+        let diff = newEpoch - this.#lastEpoch
+        this.#lastEpoch = newEpoch
+    
+        if(diff < 15) {
+            return
+        }
+
         this.state.elapsedMs += msDuration;
         this.display.clear()
+
+        if(diff)
+        
         
         this.display.blit(this.state.background, [0, 0])
         
@@ -101,8 +117,9 @@ class Catch {
             }
     
             if(this.state.fallingItems) {
+
                 this.state.fallingItems.forEach((item, idx) => {
-                    item.pos = vectors.add(item.pos, [0, this.state.speed]);                    
+                    item.pos = vectors.add(item.pos, [0, this.state.speed]);
                     this.display.blit(item.img, item.pos)
     
                     if(this.#reachBottom(item.pos)) {
@@ -116,7 +133,10 @@ class Catch {
                     if(this.#recolected(item)) {
                         this.state.fallingItems.splice(idx, 1)
                         this.state.score++
-                        this.#spawnItem()
+                        
+                        if(this.state.fallingItems.length === 0) {
+                            this.#spawnItem()
+                        }
                     }
                 })
             }
@@ -152,23 +172,37 @@ class Catch {
     }
 
     #spawnItem() {
-        if(this.state.fallingItems.length >= this.config.game.maxFallingItems)
+        if(this.state.fallingItems.length >= this.config.game.fallingItems.max)
             return
+        
+        for(let i = 0; i < this.state.itemsToSpawn; i++) {
+            if(this.state.fallingItems.length >= this.config.game.fallingItems.max)
+                return
 
-        let img = gamejs.image.load(
-            this.resources.fallingItems[Math.floor(Math.random()*resources.fallingItems.length)]
-        ).scale(this.config.fallingItemsSize)
-
-        this.state.fallingItems.push({
-            img: img,
-            pos: [Math.floor(Math.random() * (this.size[0] - this.config.fallingItemsSize[0])), 0],
-            mask: new pixelcollision.Mask(img)
-        })
+            let img = gamejs.image.load(
+                this.resources.fallingItems[Math.floor(Math.random()*resources.fallingItems.length)]
+            ).scale(this.config.fallingItemsSize)
+    
+            this.state.fallingItems.push({
+                img: img,
+                pos: [Math.floor(Math.random() * (this.size[0] - this.config.fallingItemsSize[0])), 0],
+                mask: new pixelcollision.Mask(img)
+            })
+        }
     }
 
     #maybeLevelUp() {
-        if((this.state.elapsedMs % this.config.game.levelUpMs) === 0) {
+        let minElapsed = this.state.level * this.config.game.levelUpMs
+
+        let nextLevel = this.state.level + 1
+        if(this.state.elapsedMs >= minElapsed) {
+            this.state.level = nextLevel
             this.state.speed = Math.min(this.state.speed+this.config.game.fallSpeed.step, this.config.game.fallSpeed.max)
+        }
+
+        if((this.state.level - this.state.lastItemSpawnLevelUp) >= this.config.game.fallingItems.levelUpStep) {
+            this.state.lastItemSpawnLevelUp = nextLevel
+            this.state.itemsToSpawn = Math.min(this.state.itemsToSpawn+this.config.game.fallingItems.step, this.config.game.fallingItems.max)
         }
     }
 
@@ -212,6 +246,8 @@ const outputCanvasCtx = outputCanvas.getContext('2d');
 var canvas = document.getElementById('input_canvas');
 var ctx = canvas.getContext('2d');
 
+const game = new Catch(config, resources)
+
 function hide(id) {
     document.getElementById(id)
         .classList.add("hidden")  
@@ -221,11 +257,6 @@ function show(id) {
     document.getElementById(id)
         .classList.remove("hidden")  
 }
-
-function destroy(id) {
-    document.getElementById(id).remove()
-}
-
 
 function drawHands(results) {
     if(!cameraVisible) return
@@ -252,11 +283,9 @@ function startGame() {
         resources.lives,
         ...resources.fallingItems
     ])
-    
-    const game = new Catch(config, resources)
-    
+
     gamejs.ready(function () {
-        destroy('idle')
+        hide('idle')
         show('game')
 
         controls.onResults(function(results) {
@@ -289,20 +318,28 @@ function loadVideo(id) {
 function died() {
     show('lose')
     loadVideo('lose-video')
-    destroy('game')
+    hide('game')
+    game.reset()
 
     setTimeout(() => {
-        location.reload()
+        show('idle')
+        hide('lose')
+        running = false
     }, config.loseCooldownMs)
 }
 
 function win() {
     show('win')
     loadVideo('win-video')
-    destroy('game')
+    hide('game')
+    
+    game.reset()
+    running = false
 
     setTimeout(() => {
-        location.reload()
+        show('idle')
+        hide('win')
+        running = false
     }, config.winCooldownMs)
 }
 
