@@ -237,7 +237,7 @@ class Catch {
 
 let running = false;
 let cameraVisible = false;
-const controls = setupControls()
+const { controls, camera } = setupControls()
 
 const outputCanvas = document.getElementById('output_canvas');
 const outputCanvasCtx = outputCanvas.getContext('2d');
@@ -408,16 +408,7 @@ function setupControls() {
         height: config.camera.size[1]
     });
 
-    hands.initialize()
-        .then(() => {
-            camera.start()
-                .then(() => {
-                    show('idle')
-                    destroy('loader')
-                })
-        })
-
-    return hands
+    return { controls: hands, camera: camera }
 }
 
 document.addEventListener('keyup', (e) => {
@@ -435,3 +426,21 @@ document.addEventListener('keyup', (e) => {
             break;
     }
 });
+
+let idleVideo = document.getElementById("idle-video")
+idleVideo.addEventListener('loadeddata', (e) => {
+   console.log(idleVideo.readyState)
+
+   if(idleVideo.readyState > 3){
+    controls.initialize()
+        .then(() => {
+            camera.start()
+                .then(() => {
+                    show('idle')
+                    destroy('loader')
+                })
+        })
+   }
+
+});
+
