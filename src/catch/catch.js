@@ -17,8 +17,7 @@ class Catch {
 
     #deathCallback = function() {}
     #winCallback = function() {}
-    #font = new gamejs.font.Font('200px monospace');
-
+    #font = new gamejs.font.Font('200px san-serif');
     constructor(config, resources) {
         this.config = config
         this.resources = resources
@@ -103,7 +102,7 @@ class Catch {
         
         this.display.blit(this.state.background, [0, 0])
         
-        this.display.blit(this.#font.render(`${this.state.score}`, '#ffffff'), [this.size[0] - 200, 10]);
+        this.display.blit(this.#font.render(`${this.state.score}`, '#ffffff'), [this.size[0] - 200, -75]);
 
         if(this.state.started) {
             if(this.state.lives) {
@@ -247,6 +246,11 @@ var canvas = document.getElementById('input_canvas');
 var ctx = canvas.getContext('2d');
 
 const game = new Catch(config, resources)
+
+const initiated = {
+    hands: false,
+    camera: false,
+}
 
 function hide(id) {
     document.getElementById(id)
@@ -409,10 +413,22 @@ function setupControls() {
         height: config.camera.size[1]
     });
 
+    hands.initialize()
+        .then(() => {
+            initiated.hands = true;
+            if(initiated.camera && initiated.hands) {
+                show('idle')
+                destroy('loader')
+            }
+        })
+
     camera.start()
         .then(() => {
-            show('idle')
-            destroy('loader')
+            initiated.camera = true;
+            if(initiated.camera && initiated.hands) {
+                show('idle')
+                destroy('loader')
+            }
         })
 
     return hands
