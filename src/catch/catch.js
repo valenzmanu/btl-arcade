@@ -247,11 +247,6 @@ var ctx = canvas.getContext('2d');
 
 const game = new Catch(config, resources)
 
-const initiated = {
-    hands: false,
-    camera: false,
-}
-
 function hide(id) {
     document.getElementById(id)
         .classList.add("hidden")  
@@ -415,20 +410,11 @@ function setupControls() {
 
     hands.initialize()
         .then(() => {
-            initiated.hands = true;
-            if(initiated.camera && initiated.hands) {
-                show('idle')
-                destroy('loader')
-            }
-        })
-
-    camera.start()
-        .then(() => {
-            initiated.camera = true;
-            if(initiated.camera && initiated.hands) {
-                show('idle')
-                destroy('loader')
-            }
+            camera.start()
+                .then(() => {
+                    show('idle')
+                    destroy('loader')
+                })
         })
 
     return hands
