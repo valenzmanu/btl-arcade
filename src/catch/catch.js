@@ -206,26 +206,43 @@ let running = false;
 let cameraVisible = false;
 const controls = setupControls()
 
-const canvasElement = document.getElementsByClassName('output_canvas')[0];
-const canvasCtx = canvasElement.getContext('2d');
+const outputCanvas = document.getElementById('output_canvas');
+const outputCanvasCtx = outputCanvas.getContext('2d');
 
 var canvas = document.getElementById('input_canvas');
 var ctx = canvas.getContext('2d');
 
+function hide(id) {
+    document.getElementById(id)
+        .classList.add("hidden")  
+}
+
+function show(id) {
+    document.getElementById(id)
+        .classList.remove("hidden")  
+}
+
+function destroy(id) {
+    document.getElementById(id).remove()
+}
+
+
 function drawHands(results) {
     if(!cameraVisible) return
-    canvasCtx.save();
-    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+    console.log('drawing hands')
+    outputCanvasCtx.save();
+    outputCanvasCtx.clearRect(0, 0, outputCanvas.width, outputCanvas.height);
+    outputCanvasCtx.drawImage(results.image, 0, 0, outputCanvas.width, outputCanvas.height);
     if (results.multiHandLandmarks) {
         for (const landmarks of results.multiHandLandmarks) {
 
-        drawingUtils.drawConnectors(canvasCtx, landmarks, mpHands.HAND_CONNECTIONS,
+        drawingUtils.drawConnectors(outputCanvasCtx, landmarks, mpHands.HAND_CONNECTIONS,
                         {color: '#00FF00', lineWidth: 5});
-        drawingUtils.drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
+        drawingUtils.drawLandmarks(outputCanvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
         }
     }
-    canvasCtx.restore();
+    outputCanvasCtx.restore();
 }
 
 function startGame() {
@@ -240,8 +257,8 @@ function startGame() {
     const game = new Catch(config, resources)
     
     gamejs.ready(function () {
-        hide('idle-video')
-        show('game-container')
+        destroy('idle')
+        show('game')
 
         controls.onResults(function(results) {
             if(results.multiHandLandmarks[0]) {
@@ -266,24 +283,14 @@ function startGame() {
     })
 }
 
-function hide(id) {
-    document.getElementById(id)
-        .setAttribute('style', 'display: none;')
-}
-
-function show(id) {
-    document.getElementById(id)
-        .setAttribute('style', '')    
-}
-
 function loadVideo(id) {
     document.getElementById(id).load();
 }
 
 function died() {
-    show('lose-video')
+    show('lose')
     loadVideo('lose-video')
-    hide('game-container')
+    destroy('game')
 
     setTimeout(() => {
         location.reload()
@@ -291,9 +298,9 @@ function died() {
 }
 
 function win() {
-    show('win-video')
+    show('win')
     loadVideo('win-video')
-    hide('game-container')
+    destroy('game')
 
     setTimeout(() => {
         location.reload()
@@ -302,10 +309,12 @@ function win() {
 
 function toggleCamera() {
     if(!cameraVisible) {
-        show('camera_container')
+        show('controls')
+        show('output_canvas')
         cameraVisible = true;  
     } else {
-        hide('camera_container')
+        hide('controls')
+        hide('output_canvas')
         cameraVisible = false
     }
 }
@@ -340,7 +349,7 @@ function setupControls() {
         drawHands(results)
     })
 
-    const videoElement = document.getElementsByClassName('input_video')[0];
+    const videoElement = document.getElementById('input_video');
     const camera = new cameraUtils.Camera(videoElement, {
         onFrame: async () => {
             ctx.drawImage(
