@@ -258,6 +258,10 @@ function show(id) {
         .classList.remove("hidden")  
 }
 
+function destroy(id) {
+    document.getElementById(id).remove()
+}
+
 function drawHands(results) {
     if(!cameraVisible) return
 
@@ -406,6 +410,10 @@ function setupControls() {
     });
 
     camera.start()
+        .then(() => {
+            show('idle')
+            destroy('loader')
+        })
 
     return hands
 }
