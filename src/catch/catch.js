@@ -436,8 +436,10 @@ idleVideo.addEventListener('loadeddata', (e) => {
         .then(() => {
             camera.start()
                 .then(() => {
-                    show('idle')
-                    destroy('loader')
+                    setTimeout(() => {
+                        show('idle')
+                        destroy('loader')
+                    }, 10000)
                 })
         })
    }
