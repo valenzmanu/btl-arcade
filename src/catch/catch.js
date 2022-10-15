@@ -230,7 +230,6 @@ function destroy(id) {
 function drawHands(results) {
     if(!cameraVisible) return
 
-    console.log('drawing hands')
     outputCanvasCtx.save();
     outputCanvasCtx.clearRect(0, 0, outputCanvas.width, outputCanvas.height);
     outputCanvasCtx.drawImage(results.image, 0, 0, outputCanvas.width, outputCanvas.height);
