@@ -1,38 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style type=text/css>
-        body{
-           background:#fff;
-           margin:0px;
-           padding:0px;
-        }
-        #gjs-canvas {
-            margin: 0px;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            /** automatically made visible once game is loaded **/
-            display:none;
-        }
-
-        video {
-            margin: 0px;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-        }
-
-        #output_canvas {
-            width: 100%;
-            height: 25%;
-        }
-        #input_canvas {
-            width: 100%;
-            height: 25%;
-        }
-
-    </style>
+    <link rel="stylesheet" href="styles.css">
     <meta property="og:image" content="./assets/bg.png"/>
     <meta property="og:image" content="./assets/catcher.png"/>
     <meta property="og:image" content="./assets/lives.png"/>
@@ -43,23 +12,37 @@
     <script type="module" src="./catch.js"></script>
 </head>
 <body>
-    <canvas class="input_canvas" id="input_canvas" style="display: none;"></canvas>
-    <div id="camera_container" style="display: none;">
-        <video class="input_video" id="input_video" style="display: none;"></video>
-        <canvas class="output_canvas" id="output_canvas"></canvas>
+    <div class="hidden" id="controls">
+        <video class="hidden" id="input_video"></video>
+        <canvas class="hidden" id="input_canvas"></canvas>
+        <canvas class="hidden" id="output_canvas"></canvas>
     </div>
-    
-    <video id="idle-video" autoplay muted loop playsinline>
-        <source type="video/mp4" src="./assets/idle.mp4"/>
-    </video>
-    <video id="win-video" autoplay muted loop playsinline style="display: none;">
-        <source type="video/mp4" src="./assets/win.mp4"/>
-    </video>
-    <video id="lose-video" autoplay muted loop playsinline style="display: none;">
-        <source type="video/mp4" src="./assets/lose.mp4"/>
-    </video>
-    <div id="game-container" style="display: none">
+
+    <div class="centered-container" id="loader"><div class="loader"></div></div>
+
+    <div class="bg hidden" id="idle">
+        <div class="centered-container" id="start-text">
+            <p>Presiona "Start" para empezar o "Reset" para regresar</p>
+        </div>
+        <video id="idle-video" preload="auto" autoplay muted loop playsinline>
+            <source type="video/mp4" src="./assets/idle.mp4"/>
+        </video>
+    </div>
+
+    <div class="hidden" id="game">
         <canvas id="gjs-canvas"></canvas>
+    </div>
+
+    <div class="bg hidden" id="win">
+        <video id="win-video" preload="none" autoplay muted loop playsinline>
+            <source type="video/mp4" src="./assets/win.mp4"/>
+        </video>
+    </div>
+
+    <div class="bg hidden" id="lose">
+        <video id="lose-video" preload="none" autoplay muted loop playsinline>
+            <source type="video/mp4" src="./assets/lose.mp4"/>
+        </video>
     </div>
 </body>
 </html>

@@ -4,14 +4,19 @@ const config = {
     fallingItemsSize: [150, 150],
     game: {
         lives: 3,
-        maxFallingItems: 6,
+        fallingItems: {
+            initial: 1,
+            step: 1,
+            max: 6,
+            levelUpStep: 2,
+        },
         fallSpeed: {
-            initial: 15,
+            initial: 10,
             step: 4,
             max: 30,
         },
         levelUpMs: 5000,
-        winScore: 10,
+        winScore: 20,
     },
     loseCooldownMs: 10000,
     winCooldownMs: 10000,
