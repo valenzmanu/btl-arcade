@@ -12,4 +12,5 @@ const config = {
         sw: 480,
         sh: 720,
     },
+    winCooldownMs: 10000,
 }
