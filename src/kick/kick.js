@@ -24,56 +24,66 @@ const inputCanvasElement = document.getElementsByClassName('input_canvas')[0];
 const inputCanvasCtx = inputCanvasElement.getContext('2d');
 let yTrigger = canvasElement.height * config.game.triggerLineYPerc
 
-// Mediapipe Stuff
-const pose = new _pose.Pose({
-    locateFile: (file) => {
-        switch(file){
-            case 'pose_landmark_full.tflite':
-                return pose_landmark_full
-            case 'pose_solution_packed_assets_loader.js':
-                return pose_solution_packed_assets_loader
-            case 'pose_solution_simd_wasm_bin.js':
-                return pose_solution_simd_wasm_bin
-            case 'pose_solution_simd_wasm_bin.wasm':
-                return pose_solution_simd_wasm_bin_wasm
-            case 'pose_web.binarypb':
-                return pose_web_binarypb
-            case 'pose_solution_packed_assets.data':
-                return pose_solution_packed_assets_data
-        }
-        return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
-    }
-});
-pose.setOptions({
-    modelComplexity: 1,
-    smoothLandmarks: true,
-    enableSegmentation: true,
-    smoothSegmentation: true,
-    minDetectionConfidence: 0.5,
-    minTrackingConfidence: 0.5
-});
-pose.onResults(onResults);
+const { controls, camera } = setupControls()
 
-const videoElement = document.getElementsByClassName('input_video')[0];
-const camera = new cameraUtils.Camera(videoElement, {
-    onFrame: async () => {
-        inputCanvasCtx.drawImage(
-            videoElement,
-            config.camera.sx,
-            config.camera.sy,
-            config.camera.sw,
-            config.camera.sh,
-            0,
-            0,
-            inputCanvasElement.width,
-            inputCanvasElement.height,
-        );
-        await pose.send({ image: inputCanvasElement });
-    },
-    width: config.camera.size[0],
-    height: config.camera.size[1]
-});
-camera.start();
+load_game()
+
+function setupControls() {
+
+    // Mediapipe Stuff
+    const pose = new _pose.Pose({
+        locateFile: (file) => {
+            switch (file) {
+                case 'pose_landmark_full.tflite':
+                    return pose_landmark_full
+                case 'pose_solution_packed_assets_loader.js':
+                    return pose_solution_packed_assets_loader
+                case 'pose_solution_simd_wasm_bin.js':
+                    return pose_solution_simd_wasm_bin
+                case 'pose_solution_simd_wasm_bin.wasm':
+                    return pose_solution_simd_wasm_bin_wasm
+                case 'pose_web.binarypb':
+                    return pose_web_binarypb
+                case 'pose_solution_packed_assets.data':
+                    return pose_solution_packed_assets_data
+            }
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
+        }
+    });
+    pose.setOptions({
+        modelComplexity: 1,
+        smoothLandmarks: true,
+        enableSegmentation: true,
+        smoothSegmentation: true,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+    });
+    pose.onResults(onResults);
+
+    const videoElement = document.getElementsByClassName('input_video')[0];
+    const camera = new cameraUtils.Camera(videoElement, {
+        onFrame: async () => {
+            inputCanvasCtx.drawImage(
+                videoElement,
+                config.camera.sx,
+                config.camera.sy,
+                config.camera.sw,
+                config.camera.sh,
+                0,
+                0,
+                inputCanvasElement.width,
+                inputCanvasElement.height,
+            );
+            await pose.send({ image: inputCanvasElement });
+        },
+        width: config.camera.size[0],
+        height: config.camera.size[1]
+    });
+
+    return { controls: pose, camera: camera }
+
+}
+
 
 function onResults(results) {
     //console.log(results)
@@ -107,7 +117,7 @@ function onResults(results) {
     drawingUtils.drawLandmarks(canvasCtx, results.poseLandmarks,
         { color: '#FF0000', lineWidth: 2 });
 
-    
+
     // Draw Trigger Line
     if (cameraVisible) {
         canvasCtx.beginPath()
@@ -172,6 +182,19 @@ function onTick(msDuration) {
     display.blit(accuracyMovingObjectImg, accuracyMovingObjectPos)
 }
 
+function load_game() {
+    hideAll()
+    show("loader")
+}
+
+function idle_game() {
+    hideAll()
+    current_screen = screens.start
+    show("idle-video")
+    show("start-text")
+    hide("bar-container")
+}
+
 function start_game() {
     hideAll()
     accuracyMovingObjectStopped = false
@@ -182,23 +205,41 @@ function start_game() {
     current_screen = screens.waiting_kick
 }
 
+function reset_by_time() {
+    setTimeout(() => {
+        if (current_screen != screens.waiting_kick && current_screen != screens.start) {
+            idle_game()
+        }
+    }, config.winCooldownMs)
+} 
+
+function hideBar(debounceMs){
+    setTimeout(() => {
+        hide("bar-container")
+    }, debounceMs)
+}
+
 function score_goal() {
     hideAll()
     accuracyMovingObjectStopped = true
     loadVideo("goal-video")
     setVideoPlaybackRate("goal-video", 1.2)
     show("goal-video")
+    hideBar(1000)
     accuracyMovingObjectStopped = true
     current_screen = screens.goal
+    reset_by_time()
 }
 
 function fail_goal() {
     hideAll()
     accuracyMovingObjectStopped = true
     loadVideo("fail-video")
-    setVideoPlaybackRate("fail-video", 2.0)
+    setVideoPlaybackRate("fail-video", 1.2)
     show("fail-video")
+    hideBar(1000)
     current_screen = screens.fail
+    reset_by_time()
 }
 
 function kick() {
@@ -216,6 +257,10 @@ function hide(id) {
 }
 function show(id) {
     document.getElementById(id).setAttribute("style", "");
+}
+
+function destroy(id) {
+    document.getElementById(id).remove()
 }
 
 function loadVideo(id) {
@@ -290,17 +335,36 @@ gamejs.ready(function () {
 })
 
 function triggerKickFromResults(results) {
-    if(current_screen != screens.waiting_kick){
+    if (current_screen != screens.waiting_kick) {
         return
     }
     let leftFootY = results.poseLandmarks[31].y * canvasElement.height
     let rigthFootY = results.poseLandmarks[32].y * canvasElement.height
     //console.log(`left foot: ${leftFootY}, right foot: ${rigthFootY}, yTrigger: ${yTrigger}`)
-    if(leftFootY > yTrigger && rigthFootY <= yTrigger){
+    if (leftFootY > yTrigger && rigthFootY <= yTrigger) {
         kick()
     }
-    if(rigthFootY > yTrigger && leftFootY <= yTrigger){
+    if (rigthFootY > yTrigger && leftFootY <= yTrigger) {
         kick()
     }
 }
+
+let idleVideo = document.getElementById("idle-video")
+idleVideo.addEventListener('loadeddata', (e) => {
+    console.log(idleVideo.readyState)
+
+    if (idleVideo.readyState > 3) {
+        controls.initialize()
+            .then(() => {
+                camera.start()
+                    .then(() => {
+                        setTimeout(() => {
+                            idle_game()
+                            destroy('loader')
+                        }, 10000)
+                    })
+            })
+    }
+
+});
 
