@@ -211,6 +211,12 @@ function reset_by_time() {
             idle_game()
         }
     }, config.winCooldownMs)
+} 
+
+function hideBar(debounceMs){
+    setTimeout(() => {
+        hide("bar-container")
+    }, debounceMs)
 }
 
 function score_goal() {
@@ -219,6 +225,7 @@ function score_goal() {
     loadVideo("goal-video")
     setVideoPlaybackRate("goal-video", 1.2)
     show("goal-video")
+    hideBar(1000)
     accuracyMovingObjectStopped = true
     current_screen = screens.goal
     reset_by_time()
@@ -228,8 +235,9 @@ function fail_goal() {
     hideAll()
     accuracyMovingObjectStopped = true
     loadVideo("fail-video")
-    setVideoPlaybackRate("fail-video", 2.0)
+    setVideoPlaybackRate("fail-video", 1.2)
     show("fail-video")
+    hideBar(1000)
     current_screen = screens.fail
     reset_by_time()
 }
