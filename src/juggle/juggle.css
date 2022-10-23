@@ -1,0 +1,25 @@
+body {
+    background: #fff;;
+    margin:0px;
+    padding:0px;
+}
+
+.hidden {
+    display: none;
+}
+
+#gjs-canvas {
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: none;
+}
+
+#output_canvas {
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+}
