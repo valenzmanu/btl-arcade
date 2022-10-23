@@ -40,6 +40,10 @@ var handleAudioNotAllowed = function (error) {
     console.log(error);
 }
 
-var getVolume = function() {
+var getVolume = function () {
     return audioDB
+}
+
+var getThrPercReached = function () {
+    return 100 * (audioDB / maxThreshold)
 }

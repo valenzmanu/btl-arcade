@@ -1,0 +1,39 @@
+#filler {
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    height: 99vh;
+    width: 99vw;
+}
+
+#mask {
+    position: absolute;
+    z-index: 2;
+    top: 0%;
+    height: 99vh;
+    width: 99vw;
+}
+
+#start_video {
+    height: 100vh;
+    width: 100vw;
+    object-fit: cover;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+#win_video {
+    height: 100vh;
+    width: 100vw;
+    object-fit: cover;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+}

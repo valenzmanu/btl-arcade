@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="./scream.css">
+    <meta property="og:image" content="./assets/filler.png" />
 </head>
 
 
@@ -11,6 +12,23 @@
     <script src="scream.js"></script>
     <script src="audio_logic.js"></script>
 
+    <div id="start_container">
+        <video id="start_video" autoplay muted loop playsinline>
+            <source type="video/mp4" src="../common/assets/idle.mp4" />
+        </video>
+
+    </div>
+
+    <div id="win_container" style="display: none;">
+        <video id="win_video" autoplay muted loop playsinline>
+            <source type="video/mp4" src="../common/assets/win.mp4" />
+        </video>
+    </div>
+
+    <div id="game_container" style="display: none;">
+        <img src="./assets/filler.png" id="filler">
+        <img src="./assets/mask.png" id="mask">
+    </div>
 
 </body>
 
