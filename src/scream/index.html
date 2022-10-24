@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="./scream.css">
+    <meta property="og:image" content="./assets/mask.png" />
     <meta property="og:image" content="./assets/filler.png" />
+    <meta property="og:image" content="./assets/background.png" />
 </head>
 
 
-<body>
+<body scroll="no" style="overflow: hidden; margin: 0%;">
     <script src="config.js"></script>
     <script src="scream.js"></script>
     <script src="audio_logic.js"></script>
@@ -26,8 +28,9 @@
     </div>
 
     <div id="game_container" style="display: none;">
-        <img src="./assets/filler.png" id="filler">
+        <img src="./assets/background.png" id="background">
         <img src="./assets/mask.png" id="mask">
+        <img src="./assets/filler.png" id="filler">
     </div>
 
 </body>
