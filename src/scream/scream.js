@@ -20,7 +20,7 @@ document.addEventListener('keyup', (event) => {
                 window.location = "/"
             }
             else {
-                location.reload()
+                reset_game()
             }
             break;
     }
@@ -39,7 +39,7 @@ let playGame = function () {
     console.log(`Image pos: ${imagePos}`)
     fillerImage = document.getElementById("filler")
     fillerImage.style.top = `${100 - imagePos}%`;
-    if (imagePos >= 100) {
+    if (imagePos >= config.game.winThreshold) {
         win_game()
     }
 }
