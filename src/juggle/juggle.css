@@ -1,5 +1,5 @@
 body {
-    background: #fff;;
+    background: #000;;
     margin:0px;
     padding:0px;
 }
@@ -8,12 +8,31 @@ body {
     display: none;
 }
 
+.bg {
+    height: 100vh;
+    width: 100vw;
+}
+
+.bg > video {
+    height: 100vh;
+    width: 100vw;
+    object-fit: cover;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    position: fixed;
+    z-index: -1;
+}
+
 #gjs-canvas {
     margin: 0px;
     width: 100%;
     height: 100%;
     position: absolute;
     display: none;
+    z-index: -1;
 }
 
 #output_canvas {
@@ -21,5 +40,41 @@ body {
     width: 100%;
     height: 100%;
     position: absolute;
-    z-index: -1;
+    z-index: -2;
 }
+
+.centered-container {
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#start-text {
+    font-size: 40px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    color: white;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1;
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #EE2027;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

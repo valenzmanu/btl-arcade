@@ -19,6 +19,7 @@
     "@mediapipe/drawing_utils": "^0.3.1620248257",
     "@mediapipe/hands": "^0.4.1646424915",
     "@mediapipe/pose": "^0.5.1635988162",
+    "@mediapipe/selfie_segmentation": "^0.1.1632777926",
     "gamejs": "^2.0.2"
   },
   "devDependencies": {

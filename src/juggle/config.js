@@ -7,5 +7,7 @@ const config = {
     game: {
         fallSpeed: 10,
         winScore: 5,
-    }
+    },
+    winCooldownMs: 10000,
+    loseCooldownMs: 10000,
 }

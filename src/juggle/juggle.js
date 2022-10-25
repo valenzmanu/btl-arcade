@@ -1,12 +1,9 @@
 const gamejs = require('gamejs')
 const pixelcollision = require('gamejs/src/gamejs/pixelcollision')
 const vectors = require('gamejs/src/gamejs/math/vectors')
-const draw = require('gamejs/src/gamejs/graphics');
 const cameraUtils = require('@mediapipe/camera_utils');
 const _pose = require('@mediapipe/pose');
-const drawingUtils = require('@mediapipe/drawing_utils')
-const controlUtils = require('@mediapipe/control_utils')
-
+const selfie = require('@mediapipe/selfie_segmentation')
 import pose_landmark_full from "url:./lib/pose_landmark_full.tflite"
 import pose_solution_packed_assets_loader from "url:./lib/pose_solution_packed_assets_loader.sj"
 import pose_solution_simd_wasm_bin from "url:./lib/pose_solution_simd_wasm_bin.sj"
@@ -46,6 +43,7 @@ class Juggle {
       score: 0,
       ball: undefined,
       collider: undefined,
+      colliderVisible: false,
     }
   }
 
@@ -56,7 +54,7 @@ class Juggle {
     let ballImg = gamejs.image.load(this.resources.ball).scale(this.config.ballSize)
     this.state.ball = {
       img: ballImg,
-      pos: [(this.size[0] - this.config.ballSize[0]) / 2, 0],
+      pos: [(this.size[0] - this.config.ballSize[0]) / 2, 20],
       dir: [dir.NONE , dir.y.DOWN],
       size: this.config.ballSize,
       mask: new pixelcollision.Mask(ballImg)
@@ -66,8 +64,10 @@ class Juggle {
   }
 
   #setupCollider(width, pos) {
+    if(0 >= width) width = 10
     let collider = new gamejs.graphics.Surface([width, 10])
-    draw.line(collider, '#ff0000', [0, 0], [width, 0], 10);
+    if(this.state.colliderVisible)
+      collider.fill('#ff0000')
     
     this.state.collider = {
       img: collider,
@@ -90,11 +90,7 @@ class Juggle {
         
     this.display.blit(this.state.collider.img,  this.state.collider.pos)
 
-    if(this.#ballTouched()) {
-      this.state.started = false
-      this.triggerContact(dir.x.NONE)
-    }
-
+    this.#ballTouched()
 
     this.#gravity()
     this.#checkBorderBounce()
@@ -114,7 +110,6 @@ class Juggle {
     let reachedBottom = (yBall + this.state.ball.size[1]) >= yLimit
     if(reachedBottom) {
       this.#kill()
-      //this.state.ball.dir = vectors.multiply([1, -1], this.state.ball.dir)
       return
     }
 
@@ -154,13 +149,21 @@ class Juggle {
     if(this.state.ball.dir[1] === dir.y.UP) return false
     if(this.state.ball && this.state.collider) {
       let relativeOffset = vectors.subtract(this.state.ball.pos, this.state.collider.pos)
-      let hasMaskOverlap = this.state.ball.mask.overlapRect(this.state.collider.mask, relativeOffset)
-
-
-      return hasMaskOverlap
+      let overlapRect = this.state.collider.mask.overlapRect(this.state.ball.mask, relativeOffset)
+      if(overlapRect) {
+        this.#triggerContact(relativeOffset)
+      }
     }
 
     return false
+  }
+
+  #triggerContact(relativeOffset) {
+    if(this.state.ball.dir[1] === dir.y.UP) return
+    this.state.ball.dir[1] *= -1
+    this.state.ball.dir[0] = relativeOffset[0] / this.size[0]
+
+    this.state.score += 1
   }
 
   triggerContact(xDir) {
@@ -189,13 +192,17 @@ class Juggle {
     }
 
     let pos = [
-      (Math.min(l.x, r.x) * this.size[0]) - this.config.colliderOffset.sides,
+      ((1 - Math.max(l.x, r.x)) * this.size[0]) - this.config.colliderOffset.sides,
       (Math.max(l.y, r.y) * this.size[1]) - this.config.colliderOffset.top
     ]
 
     width = (this.size[0] * width) + (2 * this.config.colliderOffset.sides)
 
     this.#setupCollider(width, pos)
+  }
+
+  toggleColliderVisible() {
+    this.state.colliderVisible = !this.state.colliderVisible
   }
 
 }
@@ -205,30 +212,27 @@ gamejs.preload([resources.ball])
 const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
 const canvasCtx = canvasElement.getContext('2d');
+const img = document.getElementById("vbackground");
+let running = false
 
+const game = new Juggle(config, resources)
 const { controls, camera } = setupControls()
 
 function drawImage(results) {
-  if(!results.poseLandmarks) return
-  
   canvasCtx.save();
-  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
-  // Only overwrite existing pixels.
-  canvasCtx.globalCompositeOperation = 'source-in';
-  canvasCtx.fillStyle = '#00FF00';
-  canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+  canvasCtx.translate(canvasElement.width, 0)
+  canvasCtx.scale(-1, 1)
+  
+  canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
 
-  // Only overwrite missing pixels.
   canvasCtx.globalCompositeOperation = 'destination-atop';
-  canvasCtx.drawImage(
-      results.image, 0, 0, canvasElement.width, canvasElement.height);
+  canvasCtx.drawImage(results.segmentationMask, 0, 0, canvasElement.width, canvasElement.height);
 
-  /*canvasCtx.globalCompositeOperation = 'source-over';
-  drawingUtils.drawConnectors(canvasCtx, results.poseLandmarks, _pose.POSE_CONNECTIONS,
-      { color: '#00FF00', lineWidth: 4 });
-  drawingUtils.drawLandmarks(canvasCtx, results.poseLandmarks,
-      { color: '#FF0000', lineWidth: 2 });*/
+  canvasCtx.globalCompositeOperation = 'destination-over';
+  canvasCtx.drawImage(img, 0, 0, canvasElement.width, canvasElement.height);
+
+  canvasCtx.restore();
 }
 
 function setupControls() {
@@ -260,12 +264,21 @@ function setupControls() {
     minDetectionConfidence: 0.5,
     minTrackingConfidence: 0.5
   });
+    
+  const selfieSegmentation = new selfie.SelfieSegmentation({locateFile: (file) => {
+    return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
+  }});
   
-  pose.onResults(drawImage);
-  
+  selfieSegmentation.setOptions({
+    modelSelection: 1,
+  });
+
+  selfieSegmentation.onResults(drawImage);
+
   const camera = new cameraUtils.Camera(videoElement, {
     onFrame: async () => {
       await pose.send({image: videoElement});
+      await selfieSegmentation.send({image: videoElement});
     },
     width: 1280,
     height: 720
@@ -274,8 +287,21 @@ function setupControls() {
   return { controls: pose, camera: camera }
 }
 
+function hide(id) {
+  document.getElementById(id)
+      .classList.add("hidden")  
+}
+
+function show(id) {
+  document.getElementById(id)
+      .classList.remove("hidden")  
+}
+
+function destroy(id) {
+  document.getElementById(id).remove()
+}
+
 gamejs.ready(function() {
-  const game = new Juggle(config, resources)
   game.setup()
 
   controls.onResults(function(results) {
@@ -298,25 +324,76 @@ gamejs.ready(function() {
     if(selectedDir !== undefined) {
       game.triggerContact(selectedDir)
     }
+
+    if(event.key == gamejs.event.K_c){
+      game.toggleColliderVisible()
+    }
+
   })
 
   game.onDeath(function() {
-    console.log('Died!')
+    show('lose')
+    hideGame()
+    setTimeout(() => {
+      show('idle')
+      hide('lose')
+      running = false
+    }, config.loseCooldownMs)
   })
 
   game.onWin(function() {
-    console.log('Won!')
+    show('win')
+    hideGame()
+    setTimeout(() => {
+      show('idle')
+      hide('win')
+      running = false
+    }, config.winCooldownMs)
   })
 
-  controls.initialize()
-  .then(() => {
-    camera.start()
-      .then(() => {
-        console.log('ready')
-        game.start()
-      })
-  })
   gamejs.onTick(function(msDuration) {
     game.onTick(msDuration)
   })
 })
+
+function startGame() {
+  hide('idle')
+  showGame()
+  running = true
+  game.start()
+}
+
+function hideGame() {
+  hide('game')
+  hide('output_canvas')
+}
+
+function showGame() {
+  show('game')
+  show('output_canvas')
+}
+
+controls.initialize()
+    .then(() => {
+        camera.start()
+          .then(() => {
+            setTimeout(() => {
+              destroy('loader')
+              show('idle')
+            }, 10000);
+            ready = true
+          })
+      })
+
+document.addEventListener('keyup', (e) => {
+  switch(e.code) {
+      case 'KeyS':
+          if(!running)
+              startGame()
+          break;
+      case 'KeyR':
+          if(!running)
+              window.location = '/'
+          break;
+  }
+});
