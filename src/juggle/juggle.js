@@ -4,12 +4,18 @@ const vectors = require('gamejs/src/gamejs/math/vectors')
 const cameraUtils = require('@mediapipe/camera_utils');
 const _pose = require('@mediapipe/pose');
 const selfie = require('@mediapipe/selfie_segmentation')
+
 import pose_landmark_full from "url:./lib/pose_landmark_full.tflite"
 import pose_solution_packed_assets_loader from "url:./lib/pose_solution_packed_assets_loader.sj"
 import pose_solution_simd_wasm_bin from "url:./lib/pose_solution_simd_wasm_bin.sj"
 import pose_solution_simd_wasm_bin_wasm from "url:./lib/pose_solution_simd_wasm_bin.wasm"
 import pose_web_binarypb from "url:./lib/pose_web.binarypb"
 import pose_solution_packed_assets_data from "url:./lib/pose_solution_packed_assets.data"
+
+import selfie_segmentation from "url:./lib/selfie_segmentation.binarypb"
+import selfie_segmentation_landscape from "url:./lib/selfie_segmentation_landscape.tflite"
+import selfie_segmentation_solution_simd_wasm_bin_js from "url:./lib/selfie_segmentation_solution_simd_wasm_bin.sj"
+import selfie_segmentation_solution_simd_wasm_bin from "url:./lib/selfie_segmentation_solution_simd_wasm_bin.wasm"
 
 
 const dir = {
@@ -266,6 +272,16 @@ function setupControls() {
   });
     
   const selfieSegmentation = new selfie.SelfieSegmentation({locateFile: (file) => {
+    switch(file) {
+      case 'selfie_segmentation.binarypb':
+        return selfie_segmentation
+      case 'selfie_segmentation_landscape.tflite':
+        return selfie_segmentation_landscape
+      case 'selfie_segmentation_solution_simd_wasm_bin.js':
+        return selfie_segmentation_solution_simd_wasm_bin_js
+      case 'selfie_segmentation_solution_simd_wasm_bin.wasm':
+        return selfie_segmentation_solution_simd_wasm_bin
+    }
     return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
   }});
   
