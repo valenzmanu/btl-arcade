@@ -32,7 +32,6 @@ const dir = {
 
 class Juggle {
   
-  #font = new gamejs.font.Font('200px san-serif')
   #winCallback = function() {}  
   #deathCallBack = function() {}
 
@@ -50,6 +49,10 @@ class Juggle {
       ball: undefined,
       collider: undefined,
       colliderVisible: false,
+      scorebg: undefined,
+      scoreTitle: undefined,
+      scoreDisplay: undefined,
+      footer: undefined,
     }
   }
 
@@ -64,6 +67,34 @@ class Juggle {
       dir: [dir.NONE , dir.y.DOWN],
       size: this.config.ballSize,
       mask: new pixelcollision.Mask(ballImg)
+    }
+
+    this.state.scorebg = {
+      img: gamejs.image.load(this.resources.scorebg).scale(this.config.scoreSize),
+      pos: [(this.size[0] - this.config.scoreSize[0])/2, 10],
+      size: this.config.scoreSize
+    }
+
+    let fontSize = this.config.scoreSize[1] * 0.24
+
+    let scoreTitleFont = new gamejs.font.Font(`${fontSize}px QAB`)
+    let rendered = scoreTitleFont.render('SCORE: ', '#ffff')
+    this.state.scoreTitle = {
+      font: scoreTitleFont,
+      img: rendered,
+      pos: [this.state.scorebg.pos[0] + (this.state.scorebg.size[0] * 0.15), (this.state.scorebg.size[1] * 0.8) - fontSize],
+      size: rendered.getSize()
+    }
+
+    this.state.scoreDisplay = {
+      font: new gamejs.font.Font(`${fontSize}px QAH`),
+      pos: [this.state.scoreTitle.pos[0] + this.state.scoreTitle.size[0], this.state.scoreTitle.pos[1]],
+    }
+
+    this.state.footer = {
+      img: gamejs.image.load(this.resources.footer).scale(this.config.footerSize),
+      pos: [(this.size[0] - this.config.footerSize[0])/2, this.size[1] - this.config.footerSize[1]],
+      size: this.config.footerSize
     }
 
     this.#setupCollider(this.size[0], [0,0])
@@ -91,7 +122,20 @@ class Juggle {
     if(!this.state.started) return
     this.display.clear()
     
-    this.display.blit(this.#font.render(`${this.state.score}`, '#00000'), [this.size[0] - 200, -75]);
+    this.display.blit(this.state.scorebg.img, this.state.scorebg.pos)
+    
+    this.display.blit(
+      this.state.scoreTitle.font.render('SCORE: ', '#ffff'),
+      this.state.scoreTitle.pos,
+    )
+
+    this.display.blit(
+      this.state.scoreDisplay.font.render(`${this.state.score}`, '#ff0000'),
+      this.state.scoreDisplay.pos,
+    )
+
+    this.display.blit(this.state.footer.img, this.state.footer.pos)
+    
     this.display.blit(this.state.ball.img, this.state.ball.pos)
         
     this.display.blit(this.state.collider.img,  this.state.collider.pos)
@@ -213,7 +257,7 @@ class Juggle {
 
 }
 
-gamejs.preload([resources.ball])
+gamejs.preload([resources.ball, resources.footer, resources.scorebg])
 
 const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
