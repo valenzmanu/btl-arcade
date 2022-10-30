@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="./juggle.css">
+  <meta property="og:image" content="./assets/ball.png"/>
+  <meta property="og:image" content="./assets/scorebg.png"/>
+  <meta property="og:image" content="./assets/footer.png"/>
+  <script src="./resources.js"></script>
+  <script src="./config.js"></script>
+  <script type="module" src="./juggle.js"></script>
+</head>
+<body>
+
+  <div class="centered-container" id="loader"><div class="loader"></div></div>
+
+  <div class="bg hidden" id="idle">
+    <div class="centered-container" id="start-text">
+        <p>Presiona "Start" para empezar o "Reset" para regresar</p>
+    </div>
+    <video id="idle-video" preload="auto" autoplay muted loop playsinline>
+        <source type="video/mp4" src="../common/assets/idle.mp4"/>
+    </video>
+  </div>
+
+  <div id="game">
+    <canvas id="gjs-canvas"></canvas>
+    <img id="vbackground" class="hidden" src="./assets/bg.jpg">
+  </div>
+
+  <div id="controls">
+    <video class="input_video hidden"></video>
+    <canvas class="output_canvas hidden" id="output_canvas"></canvas>
+  </div>
+
+  <div class="bg hidden" id="win">
+    <video id="win-video" preload="none" autoplay muted loop playsinline>
+        <source type="video/mp4" src="../common/assets/win.mp4"/>
+    </video>
+  </div>
+  <div class="bg hidden" id="lose">
+    <video id="lose-video" preload="none" autoplay muted loop playsinline>
+        <source type="video/mp4" src="../common/assets/lose.mp4"/>
+    </video>
+  </div>
+
+</body>
+</html>
