@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="./scream.css">
     <meta property="og:image" content="./assets/mask.png" />
     <meta property="og:image" content="./assets/filler.png" />
-    <meta property="og:image" content="./assets/background.png" />
 </head>
 
 
@@ -28,9 +27,20 @@
     </div>
 
     <div id="game_container" style="display: none;">
-        <img src="./assets/background.png" id="background">
+        <div id="background_container">
+            <video id="background_video" autoplay muted loop playsinline>
+                <source type="video/mp4" src="./assets/background.mp4" />
+            </video>
+
+        </div>
+
+        <div id="filler_container">
+            <img src="./assets/filler.png" id="filler">
+            <p id="filler_text"> 110% </p>
+        </div>
+        
         <img src="./assets/mask.png" id="mask">
-        <img src="./assets/filler.png" id="filler">
+
     </div>
 
 </body>

@@ -10,10 +10,12 @@ document.addEventListener('keyup', (event) => {
 
     switch (event.code) {
         case 'KeyS':
-            console.log("Pressed Start")
-            startListening()
-            showGameScreen()
-            setInterval(playGame, 50)
+            if (gameScreen == screens.start) {
+                console.log("Pressed Start")
+                startListening()
+                showGameScreen()
+                setInterval(playGame, 50)
+            }
             break;
         case 'KeyR':
             if (gameScreen == screens.start) {
@@ -35,11 +37,14 @@ let showGameScreen = function () {
 
 let playGame = function () {
     gameScreen = screens.playing
-    imagePos = getThrPercReached()
-    console.log(`Image pos: ${imagePos}`)
+    imageWidthPerc = Math.min(1.0, getThrPercReached())
+    console.log(`imageWidthPerc: ${imageWidthPerc}`)
     fillerImage = document.getElementById("filler")
-    fillerImage.style.top = `${100 - imagePos}%`;
-    if (imagePos >= config.game.winThreshold) {
+    imageWidth = config.visuals.fillerMaxWidth * imageWidthPerc
+    textIndicator = document.getElementById("filler_text")
+    textIndicator.textContent = `${Math.round(110 * imageWidthPerc)}%`
+    fillerImage.style.width = `${imageWidth}px`;
+    if (100 * imageWidthPerc >= config.game.winThreshold) {
         win_game()
     }
 }

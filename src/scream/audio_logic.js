@@ -45,5 +45,5 @@ var getVolume = function () {
 }
 
 var getThrPercReached = function () {
-    return 100 * (audioDB / maxThreshold)
+    return (audioDB / maxThreshold)
 }
