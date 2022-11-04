@@ -265,7 +265,9 @@ const canvasCtx = canvasElement.getContext('2d');
 const img = document.getElementById("vbackground");
 let running = false
 
-const game = new Juggle(config, resources)
+const gameConfig = loadConfig('juggle', config)
+
+const game = new Juggle(gameConfig, resources)
 const { controls, camera } = setupControls()
 
 function drawImage(results) {
@@ -398,7 +400,7 @@ gamejs.ready(function() {
       show('idle')
       hide('lose')
       running = false
-    }, config.loseCooldownMs)
+    }, gameConfig.loseCooldownMs)
   })
 
   game.onWin(function() {
@@ -408,7 +410,7 @@ gamejs.ready(function() {
       show('idle')
       hide('win')
       running = false
-    }, config.winCooldownMs)
+    }, gameConfig.winCooldownMs)
   })
 
   gamejs.onTick(function(msDuration) {
@@ -455,5 +457,7 @@ document.addEventListener('keyup', (e) => {
           if(!running)
               window.location = '/'
           break;
+      case 'KeyP':
+          configurator();
   }
 });

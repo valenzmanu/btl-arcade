@@ -235,6 +235,8 @@ class Catch {
     }
 }
 
+const gameConfig = loadConfig('catch', config);
+
 let running = false;
 let cameraVisible = false;
 const { controls, camera } = setupControls()
@@ -245,7 +247,7 @@ const outputCanvasCtx = outputCanvas.getContext('2d');
 var canvas = document.getElementById('input_canvas');
 var ctx = canvas.getContext('2d');
 
-const game = new Catch(config, resources)
+const game = new Catch(gameConfig, resources)
 
 function hide(id) {
     document.getElementById(id)
@@ -343,7 +345,7 @@ function win() {
         show('idle')
         hide('win')
         running = false
-    }, config.winCooldownMs)
+    }, gameConfig.winCooldownMs)
 }
 
 function toggleCamera() {
@@ -393,10 +395,10 @@ function setupControls() {
         onFrame: async () => {
             ctx.drawImage(
                 videoElement,
-                config.camera.sx,
-                config.camera.sy,
-                config.camera.sw,
-                config.camera.sh,
+                gameConfig.camera.sx,
+                gameConfig.camera.sy,
+                gameConfig.camera.sw,
+                gameConfig.camera.sh,
                 0,
                 0,
                 canvas.width,
@@ -404,8 +406,8 @@ function setupControls() {
             );
             await hands.send({image: canvas});
         },
-        width: config.camera.size[0],
-        height: config.camera.size[1]
+        width: gameConfig.camera.size[0],
+        height: gameConfig.camera.size[1]
     });
 
     return { controls: hands, camera: camera }
@@ -424,6 +426,8 @@ document.addEventListener('keyup', (e) => {
             if(!running)
                 window.location = '/'
             break;
+        case 'KeyP':
+            configurator();
     }
 });
 

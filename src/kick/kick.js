@@ -11,6 +11,8 @@ import pose_solution_simd_wasm_bin_wasm from "url:./lib/pose_solution_simd_wasm_
 import pose_web_binarypb from "url:./lib/pose_web.binarypb"
 import pose_solution_packed_assets_data from "url:./lib/pose_solution_packed_assets.data"
 
+const gameConfig = loadConfig('kick', config)
+
 const screens = {
     start: "START",
     waiting_kick: "WAITING_KIK",
@@ -22,7 +24,7 @@ const canvasElement = document.getElementsByClassName('output_canvas')[0];
 const canvasCtx = canvasElement.getContext('2d');
 const inputCanvasElement = document.getElementsByClassName('input_canvas')[0];
 const inputCanvasCtx = inputCanvasElement.getContext('2d');
-let yTrigger = canvasElement.height * config.game.triggerLineYPerc
+let yTrigger = canvasElement.height * gameConfig.game.triggerLineYPerc
 
 const { controls, camera } = setupControls()
 
@@ -65,10 +67,10 @@ function setupControls() {
         onFrame: async () => {
             inputCanvasCtx.drawImage(
                 videoElement,
-                config.camera.sx,
-                config.camera.sy,
-                config.camera.sw,
-                config.camera.sh,
+                gameConfig.camera.sx,
+                gameConfig.camera.sy,
+                gameConfig.camera.sw,
+                gameConfig.camera.sh,
                 0,
                 0,
                 inputCanvasElement.width,
@@ -76,8 +78,8 @@ function setupControls() {
             );
             await pose.send({ image: inputCanvasElement });
         },
-        width: config.camera.size[0],
-        height: config.camera.size[1]
+        width: gameConfig.camera.size[0],
+        height: gameConfig.camera.size[1]
     });
 
     return { controls: pose, camera: camera }
@@ -167,6 +169,8 @@ document.addEventListener('keyup', (e) => {
         case 'KeyC':
             toggleCamera()
             break;
+        case 'KeyP':
+            configurator();
     }
 });
 
@@ -205,7 +209,7 @@ function reset_by_time() {
         if (current_screen != screens.waiting_kick && current_screen != screens.start) {
             idle_game()
         }
-    }, config.winCooldownMs)
+    }, gameConfig.winCooldownMs)
 } 
 
 function hideBar(debounceMs){
@@ -279,12 +283,12 @@ function hideAll() {
 }
 
 function start_accuracy_bar() {
-    accuracyBarImg = gamejs.image.load(resources.accuracyBarImg).scale(config.game.accuracyBarSize)
-    accuracyMovingObjectImg = gamejs.image.load(resources.accuracyMovingObjectImg).scale(config.game.movingObjectSize)
+    accuracyBarImg = gamejs.image.load(resources.accuracyBarImg).scale(gameConfig.game.accuracyBarSize)
+    accuracyMovingObjectImg = gamejs.image.load(resources.accuracyMovingObjectImg).scale(gameConfig.game.movingObjectSize)
     accuracyMovingObjectPos = [-25, 0]
-    accuracyMovingObjectDir = 1 * config.game.movingObjectVelocity
+    accuracyMovingObjectDir = 1 * gameConfig.game.movingObjectVelocity
     accuracyMovingObjectPosYUpperLimit = 0
-    accuracyMovingObjectPosYLowerLimit = config.game.accuracyBarSize[1] - config.game.movingObjectSize[1]
+    accuracyMovingObjectPosYLowerLimit = gameConfig.game.accuracyBarSize[1] - gameConfig.game.movingObjectSize[1]
 }
 
 function get_new_accuracy_y_pos(curPos) {
@@ -292,10 +296,10 @@ function get_new_accuracy_y_pos(curPos) {
         return curPos
     }
     if (curPos > accuracyMovingObjectPosYLowerLimit) {
-        accuracyMovingObjectDir = -1 * config.game.movingObjectVelocity
+        accuracyMovingObjectDir = -1 * gameConfig.game.movingObjectVelocity
     }
     else if (curPos < accuracyMovingObjectPosYUpperLimit) {
-        accuracyMovingObjectDir = 1 * config.game.movingObjectVelocity
+        accuracyMovingObjectDir = 1 * gameConfig.game.movingObjectVelocity
     }
     return (curPos + accuracyMovingObjectDir)
 }
