@@ -1,6 +1,7 @@
 #start-text {
     font-size: 36px;
-    font-family: Arial, Helvetica, sans-serif;
+    word-spacing: 0.25em;
+    font-family: AmericanCaptain;
     text-align: center;
     color: white;
     background: rgba(0, 0, 0, 0.8);
@@ -11,7 +12,12 @@
     height: 10%;
     display: flex;
     justify-content: center;
-    margin-top: 150%;
+    margin-top: 80%;
+}
+
+@font-face {
+    font-family: "AmericanCaptain";
+    src: url("../common/assets/american_captain.ttf");
 }
 
 #idle-video {

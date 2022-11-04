@@ -86,11 +86,6 @@ function setupControls() {
 
 
 function onResults(results) {
-    //console.log(results)
-    if (!results.poseLandmarks) {
-        //console.log("No results")
-        return;
-    }
 
     triggerKickFromResults(results)
 

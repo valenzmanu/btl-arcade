@@ -7,7 +7,7 @@ const config = {
         fallingItems: {
             initial: 1,
             step: 2,
-            max: 6,
+            max: 1,
             levelUpStep: 0,
         },
         fallSpeed: {

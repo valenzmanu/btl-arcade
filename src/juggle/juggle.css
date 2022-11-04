@@ -1,7 +1,10 @@
 body {
-    background: #000;;
-    margin:0px;
-    padding:0px;
+    background: #000;
+    ;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 .hidden {
@@ -13,7 +16,7 @@ body {
     width: 100vw;
 }
 
-.bg > video {
+.bg>video {
     height: 100vh;
     width: 100vw;
     object-fit: cover;
@@ -57,11 +60,17 @@ body {
 
 #start-text {
     font-size: 40px;
-    font-family: Arial, Helvetica, sans-serif;
+    word-spacing: 0.25em;
+    font-family: AmericanCaptain;
     text-align: center;
     color: white;
     background: rgba(0, 0, 0, 0.8);
     z-index: 1;
+}
+
+@font-face {
+    font-family: "AmericanCaptain";
+    src: url("../common/assets/american_captain.ttf");
 }
 
 .loader {
@@ -70,14 +79,20 @@ body {
     border-top: 16px solid #EE2027;
     width: 120px;
     height: 120px;
-    -webkit-animation: spin 2s linear infinite; /* Safari */
+    -webkit-animation: spin 2s linear infinite;
+    /* Safari */
     animation: spin 2s linear infinite;
-  }
+}
 
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
 
 @font-face {
     font-family: 'QAB';

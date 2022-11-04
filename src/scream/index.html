@@ -1,0 +1,53 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./scream.css">
+    <meta property="og:image" content="./assets/mask.png" />
+    <meta property="og:image" content="./assets/filler.png" />
+</head>
+
+
+<body scroll="no" style="overflow: hidden; margin: 0%;">
+    <script src="config.js"></script>
+    <script src="scream.js"></script>
+    <script src="audio_logic.js"></script>
+
+    <div id="start_container">
+
+        <div class="centered-container" id="start-text">
+                <p>Presiona <u>"Start"</u> para empezar <br><br> o <u>"Reset"</u> para regresar</p>
+        </div>
+
+        <video id="start_video" autoplay muted loop playsinline>
+            <source type="video/mp4" src="../common/assets/idle.mp4" />
+        </video>
+
+    </div>
+
+    <div id="win_container" style="display: none;">
+        <video id="win_video" autoplay muted loop playsinline>
+            <source type="video/mp4" src="../common/assets/win.mp4" />
+        </video>
+    </div>
+
+    <div id="game_container" style="display: none;">
+        <div id="background_container">
+            <video id="background_video" autoplay muted loop playsinline>
+                <source type="video/mp4" src="./assets/background.mp4" />
+            </video>
+
+        </div>
+
+        <div id="filler_container">
+            <img src="./assets/filler.png" id="filler">
+            <p id="filler_text"> 110% </p>
+        </div>
+        
+        <img src="./assets/mask.png" id="mask">
+
+    </div>
+
+</body>
+
+</html>

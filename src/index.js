@@ -6,10 +6,16 @@ document.addEventListener('keyup', (e) => {
             document.location = "./catch/index.html"
             break;
         case 'KeyB':
-            document.location = "./trivia/index.html"
+            document.location = "./kick/index.html"
             break;
         case 'KeyC':
-            document.location = "./kick/index.html"
+            document.location = "./juggle/index.html"
+            break;
+        case 'KeyD':
+            document.location = "./scream/index.html"
+            break;
+        case 'KeyE':
+            document.location = "./trivia/index.html"
             break;
         case 'KeyS':
             toggleGameList()
@@ -17,10 +23,10 @@ document.addEventListener('keyup', (e) => {
     }
 });
 
-function toggleGameList(){
-    if(!gameListVisible) {
+function toggleGameList() {
+    if (!gameListVisible) {
         show('list-container')
-        gameListVisible = true;  
+        gameListVisible = true;
     } else {
         hide('list-container')
         gameListVisible = false
@@ -34,5 +40,5 @@ function hide(id) {
 
 function show(id) {
     document.getElementById(id)
-        .setAttribute('style', '')    
+        .setAttribute('style', '')
 }

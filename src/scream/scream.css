@@ -1,0 +1,98 @@
+#background {
+    position: absolute;
+    z-index: 0;
+    margin-left: 0;
+    padding-left: 0px;
+    height: 100vh;
+    width: 100vw;
+}
+
+#start-text {
+    font-size: 36px;
+    word-spacing: 0.25em;
+    font-family: AmericanCaptain;
+    text-align: center;
+    color: white;
+    background: rgba(0, 0, 0, 0.8);
+    vertical-align: middle;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    margin-top: 80%;
+}
+
+@font-face {
+    font-family: "AmericanCaptain";
+    src: url("../common/assets/american_captain.ttf");
+}
+
+#filler_text {
+    font-family: AmericanCaptain;
+    position: absolute;
+    margin-left: 855px;
+    top: 180px;
+    color: white;
+    font-size: 50px;
+    z-index: 3;
+}
+
+#filler {
+    position: absolute;
+    z-index: 2;
+    margin-left: 340px;
+    padding-left: 0px;
+    top: 219px;
+    width: 615px;
+    height: 58px;
+}
+
+#mask {
+    position: absolute;
+    z-index: 1;
+    margin-left: 94px;
+    padding-left: 0px;
+    border: 0px;
+    top: 104px;
+    width: auto;
+    max-width: 85%;
+    height: auto;
+}
+
+#start_video {
+    height: 100vh;
+    width: 100vw;
+    object-fit: cover;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+#background_video {
+    height: 1920px;
+    width: 1080px;
+    object-fit: cover;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+#win_video {
+    height: 100vh;
+    width: 100vw;
+    object-fit: cover;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+}
