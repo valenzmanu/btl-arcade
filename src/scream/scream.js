@@ -1,3 +1,4 @@
+const gameConfig = loadConfig('scream', config)
 let permission = false;
 const screens = {
     start: "START",
@@ -25,6 +26,8 @@ document.addEventListener('keyup', (event) => {
                 reset_game()
             }
             break;
+        case 'KeyP':
+            configurator();
     }
 
 })
@@ -40,11 +43,11 @@ let playGame = function () {
     imageWidthPerc = Math.min(1.0, getThrPercReached())
     console.log(`imageWidthPerc: ${imageWidthPerc}`)
     fillerImage = document.getElementById("filler")
-    imageWidth = config.visuals.fillerMaxWidth * imageWidthPerc
+    imageWidth = gameConfig.visuals.fillerMaxWidth * imageWidthPerc
     textIndicator = document.getElementById("filler_text")
     textIndicator.textContent = `${Math.round(110 * imageWidthPerc)}%`
     fillerImage.style.width = `${imageWidth}px`;
-    if (100 * imageWidthPerc >= config.game.winThreshold) {
+    if (100 * imageWidthPerc >= gameConfig.game.winThreshold) {
         win_game()
     }
 }
@@ -54,7 +57,7 @@ let win_game = function () {
     hide("start_container")
     hide("game_container")
     show("win_container")
-    setTimeout(reset_game, config.game.winTimeoutMs)
+    setTimeout(reset_game, gameConfig.game.winTimeoutMs)
 }
 
 let reset_game = function () {

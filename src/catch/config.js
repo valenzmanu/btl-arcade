@@ -3,7 +3,7 @@ const config = {
     livesSize: [100, 100],
     fallingItemsSize: [150, 150],
     game: {
-        lives: 3,
+        lives: 5,
         fallingItems: {
             initial: 1,
             step: 2,
