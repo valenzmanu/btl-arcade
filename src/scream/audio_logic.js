@@ -1,9 +1,10 @@
 var AudioContext;
 var audioContent;
 var audioDB = 0;
-var sampleFreq = config.audio.sampleFreqMs
-let debug = config.audio.debug
-let maxThreshold = config.audio.maxThresholdDB
+const gamegameConfig = loadConfig('scream', config)
+var sampleFreq = gameConfig.audio.sampleFreqMs
+let debug = gameConfig.audio.debug
+let maxThreshold = gameConfig.audio.maxThresholdDB
 
 var listenAudio = function (stream) {
     console.log("Running sound allowed")
