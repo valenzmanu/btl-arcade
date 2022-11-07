@@ -456,6 +456,8 @@ document.addEventListener('keyup', (e) => {
       case 'KeyR':
           if(!running)
               window.location = '/'
+          else
+              location.reload()
           break;
       case 'KeyP':
           configurator();
