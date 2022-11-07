@@ -1,5 +1,5 @@
 const config = {
-    ballSize: [300, 300],
+    ballSize: [150, 150],
     scoreSize: [323, 157],
     footerSize: [532, 171],
     colliderOffset: {
