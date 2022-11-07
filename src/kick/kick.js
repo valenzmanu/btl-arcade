@@ -25,6 +25,7 @@ const canvasCtx = canvasElement.getContext('2d');
 const inputCanvasElement = document.getElementsByClassName('input_canvas')[0];
 const inputCanvasCtx = inputCanvasElement.getContext('2d');
 let yTrigger = canvasElement.height * gameConfig.game.triggerLineYPerc
+let resetTimeout = undefined
 
 const { controls, camera } = setupControls()
 
@@ -164,6 +165,9 @@ document.addEventListener('keyup', (e) => {
             }
             else {
                 start_game()
+                if(resetTimeout != undefined){
+                    clearTimeout(resetTimeout)
+                }
             }
             break;
         case 'KeyC':
@@ -205,7 +209,7 @@ function start_game() {
 }
 
 function reset_by_time() {
-    setTimeout(() => {
+    resetTimeout = setTimeout(() => {
         if (current_screen != screens.waiting_kick && current_screen != screens.start) {
             idle_game()
         }
