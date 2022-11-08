@@ -12,4 +12,5 @@ const config = {
     },
     winCooldownMs: 10000,
     loseCooldownMs: 10000,
+    gameStartDelay: 3000,
 }

@@ -44,6 +44,7 @@ class Juggle {
 
   #resetState() {
     this.state = {
+      display: false,
       started: false,
       score: 0,
       ball: undefined,
@@ -115,11 +116,21 @@ class Juggle {
   }
 
   start() {
-    this.state.started = true
+    this.displayGame()
+    
+    setTimeout(() => {
+      this.state.started = true
+    }, this.config.gameStartDelay)
+  }
+
+  displayGame() {
+    this.state.display = true
   }
 
   onTick(msDuration) {
-    if(!this.state.started) return
+    console.log(this.state)
+    if(!this.state.display) return
+
     this.display.clear()
     
     this.display.blit(this.state.scorebg.img, this.state.scorebg.pos)
@@ -139,6 +150,9 @@ class Juggle {
     this.display.blit(this.state.ball.img, this.state.ball.pos)
         
     this.display.blit(this.state.collider.img,  this.state.collider.pos)
+
+    // If not started just display, do not move
+    if(!this.state.started) return
 
     this.#ballTouched()
 
@@ -163,9 +177,13 @@ class Juggle {
       return
     }
 
-    let reachedTop = 0 >= yBall
-    if(reachedTop) {
-      this.state.ball.dir = vectors.multiply([1, -1], this.state.ball.dir)
+
+    if(0 >= this.state.ball.dir[1]) {
+      // Check ball is going up
+      let reachedTop = 0 >= yBall
+      if(reachedTop) {
+        this.state.ball.dir = vectors.multiply([1, -1], this.state.ball.dir)
+      }
     }
 
     let xLimit = this.size[0]
@@ -419,10 +437,12 @@ gamejs.ready(function() {
 })
 
 function startGame() {
-  hide('idle')
-  showGame()
-  running = true
-  game.start()
+  if(!running) {
+    hide('idle')
+    showGame()
+    running = true
+    game.start()
+  }
 }
 
 function hideGame() {
@@ -450,8 +470,7 @@ controls.initialize()
 document.addEventListener('keyup', (e) => {
   switch(e.code) {
       case 'KeyS':
-          if(!running)
-              startGame()
+          startGame()
           break;
       case 'KeyR':
           if(!running)
