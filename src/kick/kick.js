@@ -145,13 +145,14 @@ var accuracyMovingObjectStopped = false
 
 
 
-document.addEventListener('keyup', (e) => {
+document.addEventListener('keydown', (e) => {
     switch (e.code) {
         case 'KeyS':
             console.log("Pressed Start")
             start_game()
             break;
         case 'KeyK':
+        case 'KeyA':
             if (current_screen != screens.waiting_kick) {
                 break;
             }
