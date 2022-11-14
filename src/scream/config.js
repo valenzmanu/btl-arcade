@@ -6,7 +6,7 @@ const config = {
     },
 
     visuals: {
-        fillerMaxWidth: 615,
+        fillerMaxWidth: 418,
         winPerc: 110,
     },
 

@@ -2,19 +2,19 @@ let gameListVisible = true
 
 document.addEventListener('keyup', (e) => {
     switch (e.code) {
-        case 'KeyA':
+        case 'KeyE':
             document.location = "./catch/index.html"
             break;
-        case 'KeyB':
+        case 'KeyA':
             document.location = "./kick/index.html"
             break;
-        case 'KeyC':
+        case 'KeyB':
             document.location = "./juggle/index.html"
             break;
-        case 'KeyD':
+        case 'KeyC':
             document.location = "./scream/index.html"
             break;
-        case 'KeyE':
+        case 'KeyD':
             document.location = "./trivia/index.html"
             break;
         case 'KeyS':
