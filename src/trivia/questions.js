@@ -46,7 +46,7 @@ let questions = {
             "id": 8,
             "text": "¿Cuántos mundiales de fútbol ha ganado España?",
             "options": "A. 1<br><br> B. 2<br><br> C. 3<br><br> D. 4<br><br>",
-            "answer": "1"
+            "answer": "a"
         },
         {
             "id": 9,
