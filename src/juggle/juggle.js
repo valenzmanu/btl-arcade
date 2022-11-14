@@ -281,6 +281,10 @@ const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
 const canvasCtx = canvasElement.getContext('2d');
 const img = document.getElementById("vbackground");
+
+canvasElement.width = img.width
+canvasElement.height = img.height
+
 let running = false
 
 const gameConfig = loadConfig('juggle', config)
@@ -290,7 +294,7 @@ const { controls, camera } = setupControls()
 
 function drawImage(results) {
   canvasCtx.save();
-
+  
   canvasCtx.translate(canvasElement.width, 0)
   canvasCtx.scale(-1, 1)
   
