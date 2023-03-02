@@ -220,6 +220,12 @@ class Catch {
             this.state.catcher.pos[0] = newPos
         }
     }
+
+    moveCatcherMotion(pos) {
+        if(this.display.rect.collidePoint(pos)) {
+            this.state.catcher.pos[0] =  Math.min(Math.max(0, pos[0]), this.size[0] - this.config.catcherSize[0])
+        }
+    }
 }
 
 const gameConfig = loadConfig('catch-no-cv', config);
@@ -258,6 +264,14 @@ function startGame() {
         if(event.key === gamejs.event.K_RIGHT) {
             game.moveCatcherStep(20)
         }
+    })
+
+    gamejs.event.onMouseMotion(function(event) {
+        game.moveCatcherMotion(event.pos)
+    })
+
+    gamejs.event.onTouchMotion(function(event) {
+        game.moveCatcherMotion(event.touches[0].pos)
     })
 
     gamejs.ready(function () {
@@ -306,52 +320,5 @@ document.getElementById('start').addEventListener('click', (e) => {
 document.getElementById('start-text').addEventListener('click', (e) => {
     if(!running)
         startGame()
-});
-
-
-let tl = null
-
-function mleft() {
-    game.moveCatcherStep(-20)
-    tl = setTimeout(mleft, 100)
-}
-
-document.getElementById('left-button').addEventListener('mousedown', (e) => {
-    if(running) mleft()
-});
-
-document.getElementById('left-button').addEventListener('mouseup', (e) => {
-    if(tl) clearTimeout(tl);
-});
-
-document.getElementById('left-button').addEventListener('touchstart', (e) => {
-    if(running) mleft()
-});
-
-document.getElementById('left-button').addEventListener('touchend', (e) => {
-    if(tl) clearTimeout(tl);
-});
-
-let tr = null
-
-function mright() {
-    game.moveCatcherStep(20)
-    tr = setTimeout(mright, 100)
-}
-
-document.getElementById('right-button').addEventListener('mousedown', (e) => {
-    if(running) mright()
-});
-
-document.getElementById('right-button').addEventListener('mouseup', (e) => {
-    if(tr) clearTimeout(tr);
-});
-
-document.getElementById('right-button').addEventListener('touchstart', (e) => {
-    if(running) mright()
-});
-
-document.getElementById('right-button').addEventListener('touchend', (e) => {
-    if(tr) clearTimeout(tr);
 });
 
