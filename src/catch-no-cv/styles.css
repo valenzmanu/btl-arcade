@@ -37,7 +37,7 @@ body {
 #start-text {
     font-size: 40px;
     word-spacing: 0.25em;
-    font-family: "AmericanCaptain";
+    font-family: "Calibri Bold";
     text-align: center;
     color: white;
     background: rgba(0, 0, 0, 0.8);
@@ -45,8 +45,8 @@ body {
 }
 
 @font-face {
-    font-family: "AmericanCaptain";
-    src: url("../common/assets/american_captain.ttf");
+    font-family: "Calibri Bold";
+    src: url("../common/assets/calibri_bold.ttf");
 }
 
 #gjs-canvas {
@@ -72,7 +72,7 @@ body {
     padding: 0px;
     font-size: 150px;
     word-spacing: 0.25em;
-    font-family: "AmericanCaptain";
+    font-family: "Calibri Bold";
     text-align: center;
     color: white;
     background: rgba(0, 0, 0, 0.8);
@@ -112,13 +112,13 @@ body {
     100% { transform: rotate(360deg); }
   }
 
-#win > img {
-    width: 100%;
+.win-img {
+    width: 70%;
     height: auto;
 }
 
 #lose > img {
-    width: 100%;
+    width: 70%;
     height: auto;
 }
 
@@ -131,7 +131,7 @@ body {
     background-color: transparent;
     font-size: 40px;
     word-spacing: 0.25em;
-    font-family: "AmericanCaptain";
+    font-family: "Calibri Bold";
     text-align: center;
     color: white;
     border-color: transparent;

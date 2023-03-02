@@ -1,10 +1,10 @@
 const resources = {
-    background: './assets/bg.jpeg',
+    background: './assets/bggame.jpg',
     win: './assets/bg.jpeg',
     lose: './assets/lose.jpeg',
     idle: './assets/win.jpeg',
     catcher: './assets/Loncherita.png',
-    lives: './assets/ICON.png',
+    lives: './assets/PAPAS.png',
     fallingItems: [
         './assets/ALAS.png',
         './assets/FLAN.png',
@@ -14,4 +14,5 @@ const resources = {
         './assets/PIERNAS.png',
         './assets/VASO.png',
     ],
+    banner: './assets/CONCEPTO.png',
 }
