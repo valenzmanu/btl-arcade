@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <meta property="og:image" content="./assets/ALAS.png"/>
+    <meta property="og:image" content="./assets/FLAN.png"/>
+    <meta property="og:image" content="./assets/HELADO.png"/>
+    <meta property="og:image" content="./assets/ICON.png"/>
+    <meta property="og:image" content="./assets/PAPAS.png"/>
+    <meta property="og:image" content="./assets/PECHUGAS.png"/>
+    <meta property="og:image" content="./assets/PIERNAS.png"/>
+    <meta property="og:image" content="./assets/VASO.png"/>
+    <meta property="og:image" content="./assets/bg.jpeg"/>
+    <meta property="og:image" content="./assets/Loncherita.png"/>
+    <meta property="og:image" content="./assets/lose.png"/>
+    <meta property="og:image" content="./assets/win.png"/>
+    <script src="./resources.js"></script>
+    <script src="./config.js"></script>
+    <script src="../common/config/configPersistance.js"></script>
+    <script type="module" src="./catch.js"></script>
+</head>
+<body>
+    <div class="hidden" id="controls">
+        <video class="hidden" id="input_video"></video>
+        <canvas class="hidden" id="input_canvas"></canvas>
+        <canvas class="hidden" id="output_canvas"></canvas>
+    </div>
+
+    <a href="config.html" id="configurator"></a>
+    
+    <div class="bg" id="idle">
+        <div class="centered-container" id="start-text">
+            <button id="start">Presiona aqui para empezar</button>
+        </div>
+    </div>
+
+    <div class="hidden" id="game">
+        <canvas id="gjs-canvas"></canvas>
+        <div class="buttons">
+            <button id="left-button">&larr;</button>
+            <button id="right-button">&rarr;</button>
+        </div>
+    </div>
+
+    <div class="hidden" id="win">
+        <img src="./assets/win.png">
+    </div>
+
+    <div class="hidden" id="lose">
+        <img src="./assets/lose.png">
+    </div>
+</body>
+</html>
