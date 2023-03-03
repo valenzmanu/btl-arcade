@@ -11,9 +11,9 @@ const config = {
             levelUpStep: 0,
         },
         fallSpeed: {
-            initial:2,
+            initial:6,
             step: 1,
-            max: 6,
+            max: 10,
         },
         levelUpMs: 2000,
         winScore: 10,

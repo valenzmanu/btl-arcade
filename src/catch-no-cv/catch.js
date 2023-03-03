@@ -7,7 +7,7 @@ class Catch {
 
     #deathCallback = function() {}
     #winCallback = function() {}
-    #font = new gamejs.font.Font('200px calibri-bold');
+    #font = new gamejs.font.Font('300px monospace');
     constructor(config, resources) {
         this.config = config
         this.resources = resources
@@ -52,15 +52,15 @@ class Catch {
         let catcherImg = gamejs.image.load(this.resources.catcher).scale(this.config.catcherSize)
         this.state.catcher = {
             img: catcherImg,
-            pos: [0, this.size[1] - 385],
+            pos: [0, this.size[1] - 300],
             mask: new pixelcollision.Mask(catcherImg)
         }
 
         for(let i =  0; i < this.state.remainingLives; i++) {
-            let x = (this.config.livesSize[1] * i) + 20
+            let x = (this.config.livesSize[1] * i) + 400
             this.state.lives.push({
                 img: gamejs.image.load(this.resources.lives).scale(this.config.livesSize),
-                pos: [x, 240]
+                pos: [x, 20]
             })
         }
 
@@ -88,7 +88,7 @@ class Catch {
 
         this.display.blit(this.state.background, [0, 0])
         
-        this.display.blit(this.#font.render(`${this.state.score}`, '#ffffff'), [this.size[0] - 200, 60]);
+        this.display.blit(this.#font.render(`${this.state.score}`, '#ffffff'), [this.size[0] - 200, 120]);
 
         if(this.state.started) {
             if(this.state.lives) {
