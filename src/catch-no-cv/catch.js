@@ -28,6 +28,7 @@ class Catch {
             level: 1,
             itemsToSpawn: this.config.game.fallingItems.initial,
             lastItemSpawnLevelUp: 1,
+            lastSpawn: null
         }
     }
 
@@ -126,6 +127,7 @@ class Catch {
                 })
             }
     
+            this.#spawnItem()
             this.#maybeLevelUp()
             this.#checkWin()
         }
@@ -160,9 +162,18 @@ class Catch {
         if(this.state.fallingItems.length >= this.config.game.fallingItems.max)
             return
         
+        let now = new Date().getTime()
+        
+        if(this.state.lastSpawn) {
+            let diff = now - this.state.lastSpawn
+            if(this.config.game.fallingItems.newSpawnOffsetMs >= diff) return
+        }
+
         for(let i = 0; i < this.state.itemsToSpawn; i++) {
             if(this.state.fallingItems.length >= this.config.game.fallingItems.max)
                 return
+
+            this.state.lastSpawn = new Date().getTime()
 
             let imgR = this.resources.fallingItems[Math.floor(Math.random()*this.resources.fallingItems.length)]
         
@@ -187,7 +198,7 @@ class Catch {
 
         if((this.state.level - this.state.lastItemSpawnLevelUp) >= this.config.game.fallingItems.levelUpStep) {
             this.state.lastItemSpawnLevelUp = nextLevel
-            this.state.itemsToSpawn = Math.min(this.state.itemsToSpawn+this.config.game.fallingItems.step, this.config.game.fallingItems.max)
+            //this.state.itemsToSpawn = Math.min(this.state.itemsToSpawn+this.config.game.fallingItems.step, this.config.game.fallingItems.max)
         }
     }
 
