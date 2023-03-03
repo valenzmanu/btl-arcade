@@ -7,7 +7,7 @@ class Catch {
 
     #deathCallback = function() {}
     #winCallback = function() {}
-    #font = new gamejs.font.Font('300px monospace');
+    #font = new gamejs.font.Font('200px monospace');
     constructor(config, resources) {
         this.config = config
         this.resources = resources
@@ -88,7 +88,7 @@ class Catch {
 
         this.display.blit(this.state.background, [0, 0])
         
-        this.display.blit(this.#font.render(`${this.state.score}`, '#ffffff'), [this.size[0] - 200, 120]);
+        this.display.blit(this.#font.render(`${this.state.score}`, '#fcecd3'), [this.size[0] - 200, 120]);
 
         if(this.state.started) {
             if(this.state.lives) {
