@@ -12,9 +12,9 @@ const config = {
             newSpawnOffsetMs: 400,
         },
         fallSpeed: {
-            initial:10,
+            initial:7,
             step: 1,
-            max: 30,
+            max: 25,
         },
         levelUpMs: 2000,
         winScore: 30,
