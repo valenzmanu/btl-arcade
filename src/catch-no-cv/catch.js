@@ -178,13 +178,45 @@ class Catch {
             let imgR = this.resources.fallingItems[Math.floor(Math.random()*this.resources.fallingItems.length)]
         
             let img = gamejs.image.load(imgR).scale(this.config.fallingItemsSize)
-    
+
+            //let relativeOffset = vectors.subtract(this.state.catcher.pos, item.pos)
+            //let hasMaskOverlap = this.state.catcher.mask.overlap(item.mask, relativeOffset)
+
+            let newItemMask = new pixelcollision.Mask(img)
+            let spawnPos = this.#getPosition(newItemMask)
+
             this.state.fallingItems.push({
                 img: img,
-                pos: [Math.floor(Math.random() * (this.size[0] - this.config.fallingItemsSize[0])), 0],
-                mask: new pixelcollision.Mask(img)
+                pos: spawnPos,
+                mask: newItemMask
             })
         }
+    }
+
+    #getPosition(newItemMask) {
+        let requiresRePositioning = false
+        let spawnPos = this.#getRandomXPos(this.config.fallingItemsSize[0])
+        
+        for(let j =  0; j < this.state.fallingItems.length; j++) {
+            let item = this.state.fallingItems[j]
+            let relativeOffset = vectors.subtract(spawnPos, item.pos)
+            
+            let hasMaskOverlap = this.state.catcher.mask.overlap(newItemMask, relativeOffset)
+
+            if(hasMaskOverlap) {
+                requiresRePositioning = true
+            }
+        }
+
+        if(requiresRePositioning) {
+            return this.#getPosition(newItemMask)
+        } else {
+            return spawnPos
+        }
+    }
+
+    #getRandomXPos(itemWidth) {
+        return [Math.floor(Math.random() * (this.size[0] - itemWidth)), 0]
     }
 
     #maybeLevelUp() {
