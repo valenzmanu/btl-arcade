@@ -7,14 +7,14 @@ const config = {
         fallingItems: {
             initial: 2,
             step: 1,
-            max: 5,
+            max: 2,
             levelUpStep: 1,
             newSpawnOffsetMs: 400,
         },
         fallSpeed: {
-            initial:7,
+            initial:5,
             step: 1,
-            max: 25,
+            max: 15,
         },
         levelUpMs: 2000,
         winScore: 30,
