@@ -4,7 +4,7 @@ const resources = {
     lose: './assets/lose.jpeg',
     idle: './assets/win.jpeg',
     catcher: './assets/Loncherita.png',
-    lives: './assets/PAPAS.png',
+    lives: './assets/heart.png',
     fallingItems: [
         './assets/ALAS.png',
         './assets/FLAN.png',

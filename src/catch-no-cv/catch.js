@@ -28,6 +28,7 @@ class Catch {
             level: 1,
             itemsToSpawn: this.config.game.fallingItems.initial,
             lastItemSpawnLevelUp: 1,
+            lastSpawn: null
         }
     }
 
@@ -126,6 +127,7 @@ class Catch {
                 })
             }
     
+            this.#spawnItem()
             this.#maybeLevelUp()
             this.#checkWin()
         }
@@ -160,20 +162,61 @@ class Catch {
         if(this.state.fallingItems.length >= this.config.game.fallingItems.max)
             return
         
+        let now = new Date().getTime()
+        
+        if(this.state.lastSpawn) {
+            let diff = now - this.state.lastSpawn
+            if(this.config.game.fallingItems.newSpawnOffsetMs >= diff) return
+        }
+
         for(let i = 0; i < this.state.itemsToSpawn; i++) {
             if(this.state.fallingItems.length >= this.config.game.fallingItems.max)
                 return
 
+            this.state.lastSpawn = new Date().getTime()
+
             let imgR = this.resources.fallingItems[Math.floor(Math.random()*this.resources.fallingItems.length)]
         
             let img = gamejs.image.load(imgR).scale(this.config.fallingItemsSize)
-    
+
+            //let relativeOffset = vectors.subtract(this.state.catcher.pos, item.pos)
+            //let hasMaskOverlap = this.state.catcher.mask.overlap(item.mask, relativeOffset)
+
+            let newItemMask = new pixelcollision.Mask(img)
+            let spawnPos = this.#getPosition(newItemMask)
+
             this.state.fallingItems.push({
                 img: img,
-                pos: [Math.floor(Math.random() * (this.size[0] - this.config.fallingItemsSize[0])), 0],
-                mask: new pixelcollision.Mask(img)
+                pos: spawnPos,
+                mask: newItemMask
             })
         }
+    }
+
+    #getPosition(newItemMask) {
+        let requiresRePositioning = false
+        let spawnPos = this.#getRandomXPos(this.config.fallingItemsSize[0])
+        
+        for(let j =  0; j < this.state.fallingItems.length; j++) {
+            let item = this.state.fallingItems[j]
+            let relativeOffset = vectors.subtract(spawnPos, item.pos)
+            
+            let hasMaskOverlap = this.state.catcher.mask.overlap(newItemMask, relativeOffset)
+
+            if(hasMaskOverlap) {
+                requiresRePositioning = true
+            }
+        }
+
+        if(requiresRePositioning) {
+            return this.#getPosition(newItemMask)
+        } else {
+            return spawnPos
+        }
+    }
+
+    #getRandomXPos(itemWidth) {
+        return [Math.floor(Math.random() * (this.size[0] - itemWidth)), 0]
     }
 
     #maybeLevelUp() {
@@ -187,7 +230,7 @@ class Catch {
 
         if((this.state.level - this.state.lastItemSpawnLevelUp) >= this.config.game.fallingItems.levelUpStep) {
             this.state.lastItemSpawnLevelUp = nextLevel
-            this.state.itemsToSpawn = Math.min(this.state.itemsToSpawn+this.config.game.fallingItems.step, this.config.game.fallingItems.max)
+            //this.state.itemsToSpawn = Math.min(this.state.itemsToSpawn+this.config.game.fallingItems.step, this.config.game.fallingItems.max)
         }
     }
 
