@@ -342,6 +342,9 @@ function triggerKickFromResults(results) {
     if (current_screen != screens.waiting_kick) {
         return
     }
+
+    if(!results.poseLandmarks) return;
+
     let leftFootY = results.poseLandmarks[31].y * canvasElement.height
     let rigthFootY = results.poseLandmarks[32].y * canvasElement.height
     //console.log(`left foot: ${leftFootY}, right foot: ${rigthFootY}, yTrigger: ${yTrigger}`)
