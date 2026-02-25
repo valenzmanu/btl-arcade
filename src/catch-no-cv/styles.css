@@ -3,9 +3,9 @@ html {
 }
 
 body {
-    background-image: url('./assets/bg.jpeg');
+    background-image: url('./assets/idle.png');
     background-repeat: no-repeat;
-    background-size: 100vh 100vh;
+    background-size: 100% 100%;
     margin:0px;
     padding:0px;
     overflow-y: hidden;
@@ -117,10 +117,16 @@ body {
     height: auto;
 }
 
-#lose > img {
-    width: 70%;
-    height: auto;
+#win > img {
+    width: 100%;
+    height: 100%;
 }
+
+#lose > img {
+    width: 100%;
+    height: 100%;
+}
+
 
 #game {
     width: 100vh;

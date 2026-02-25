@@ -1,7 +1,7 @@
 const config = {
-    catcherSize: [200, 200],
-    livesSize: [80, 80],
-    fallingItemsSize: [150, 150],
+    catcherSize: [300, 200],
+    livesSize: [200, 100],
+    fallingItemsSize: [200, 150],
     game: {
         lives: 3,
         fallingItems: {

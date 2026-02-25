@@ -1,18 +1,12 @@
 const resources = {
-    background: './assets/bggame.jpg',
+    background: './assets/idlegame.png',
     win: './assets/bg.jpeg',
     lose: './assets/lose.jpeg',
     idle: './assets/win.jpeg',
-    catcher: './assets/Loncherita.png',
-    lives: './assets/PAPAS.png',
+    catcher: './assets/goldpot1.png',
+    lives: './assets/clover1.png',
     fallingItems: [
-        './assets/ALAS.png',
-        './assets/FLAN.png',
-        './assets/HELADO.png',
-        './assets/PAPAS.png',
-        './assets/PECHUGAS.png',
-        './assets/PIERNAS.png',
-        './assets/VASO.png',
+        './assets/coin.png'
     ],
     banner: './assets/CONCEPTO.png',
 }
