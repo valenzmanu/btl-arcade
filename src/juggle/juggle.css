@@ -56,14 +56,16 @@ body {
 }
 
 #start-text {
-    font-size: 40px;
-    word-spacing: 0.25em;
+    font-size: 20px;
+    word-spacing: 0.2em;
     font-family: AmericanCaptain;
     text-align: center;
     color: white;
     background: rgba(0, 0, 0, 0.8);
     z-index: 1;
+    margin-top: 20%;
 }
+
 
 @font-face {
     font-family: "AmericanCaptain";

@@ -72,7 +72,7 @@ class Juggle {
 
     this.state.scorebg = {
       img: gamejs.image.load(this.resources.scorebg).scale(this.config.scoreSize),
-      pos: [(this.size[0] - this.config.scoreSize[0])/2, 10],
+      pos: this.config.scorePos,
       size: this.config.scoreSize
     }
 
@@ -83,7 +83,7 @@ class Juggle {
     this.state.scoreTitle = {
       font: scoreTitleFont,
       img: rendered,
-      pos: [this.state.scorebg.pos[0] + (this.state.scorebg.size[0] * 0.15), (this.state.scorebg.size[1] * 0.8) - fontSize],
+      pos: [this.state.scorebg.pos[0] + (this.state.scorebg.size[0] * 0.15), (this.state.scorebg.size[1] * 0.75) - fontSize],
       size: rendered.getSize()
     }
 
@@ -92,11 +92,11 @@ class Juggle {
       pos: [this.state.scoreTitle.pos[0] + this.state.scoreTitle.size[0], this.state.scoreTitle.pos[1]],
     }
 
-    this.state.footer = {
+    /*this.state.footer = {
       img: gamejs.image.load(this.resources.footer).scale(this.config.footerSize),
       pos: [(this.size[0] - this.config.footerSize[0])/2, this.size[1] - this.config.footerSize[1]],
       size: this.config.footerSize
-    }
+    }*/
 
     this.#setupCollider(this.size[0], [0,0])
   }
@@ -128,7 +128,7 @@ class Juggle {
   }
 
   onTick(msDuration) {
-    console.log(this.state)
+    //console.log(this.state)
     if(!this.state.display) return
 
     this.display.clear()
@@ -141,11 +141,11 @@ class Juggle {
     )
 
     this.display.blit(
-      this.state.scoreDisplay.font.render(`${this.state.score}`, '#ff0000'),
+      this.state.scoreDisplay.font.render(`${this.state.score}`, '#cae15a'),
       this.state.scoreDisplay.pos,
     )
 
-    this.display.blit(this.state.footer.img, this.state.footer.pos)
+    //this.display.blit(this.state.footer.img, this.state.footer.pos)
     
     this.display.blit(this.state.ball.img, this.state.ball.pos)
         
@@ -389,6 +389,7 @@ gamejs.ready(function() {
   game.setup()
 
   controls.onResults(function(results) {
+    console.log(results.poseLandmarks)
     if(!results.poseLandmarks) return
     let leftEar = results.poseLandmarks[7]
     let rightEar = results.poseLandmarks[8]

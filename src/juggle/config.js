@@ -1,13 +1,14 @@
 const config = {
-    ballSize: [150, 150],
+    ballSize: [75, 75],
     scoreSize: [323, 157],
+    scorePos: [10, 10],
     footerSize: [532, 171],
     colliderOffset: {
-        top: 450,
+        top: 40,
         sides: 20,
     },
     game: {
-        fallSpeed: 40,
+        fallSpeed: 5,
         winScore: 10,
     },
     winCooldownMs: 10000,
