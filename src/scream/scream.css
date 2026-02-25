@@ -8,20 +8,14 @@
 }
 
 #start-text {
-    font-size: 36px;
-    word-spacing: 0.25em;
+    font-size: 20px;
+    word-spacing: 0.2em;
     font-family: AmericanCaptain;
     text-align: center;
     color: white;
     background: rgba(0, 0, 0, 0.8);
-    vertical-align: middle;
-    align-items: center;
-    align-content: center;
-    width: 100%;
-    height: 10%;
-    display: flex;
-    justify-content: center;
-    margin-top: 80%;
+    z-index: 1;
+    margin-top: 45%;
 }
 
 @font-face {
@@ -32,8 +26,8 @@
 #filler_text {
     font-family: AmericanCaptain;
     position: absolute;
-    margin-left: 555px;
-    top: 95px;
+    margin-left: 925px;
+    top: 290px;
     color: white;
     font-size: 45px;
     z-index: 3;
@@ -42,9 +36,9 @@
 #filler {
     position: absolute;
     z-index: 2;
-    margin-left: 220px;
+    margin-left: 620px;
     padding-left: 0px;
-    top: 148px;
+    top: 335px;
     width: 25px;
     height: 35px;
 }
@@ -52,10 +46,10 @@
 #mask {
     position: absolute;
     z-index: 1;
-    margin-left: 58px;
+    margin-left: 425px;
     padding-left: 0px;
     border: 0px;
-    top: 70px;
+    top: 150px;
     width: auto;
     max-width: 85%;
     height: auto;
